@@ -2,35 +2,27 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
             "name": "Uvicorn",
             "type": "python",
             "request": "launch",
             "module": "uvicorn",
             "args": [
                 "src.main:app",
-                "--host", "0.0.0.0",
-                "--port", "8001",
-                "--ws", "websockets",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8000",
+                "--ws",
+                "websockets",
                 "--reload"
-            ],
-            "jinja": true
-        },
-        {
-            "name": "gunicorn",
-            "type": "python",
-            "request": "launch",
-            "module": "gunicorn",
-            "args": [
-                "src.main:app",
-                "--bind",
-                "0.0.0.0:8001",
-                "--reload",
-                "--worker-class", "uvicorn.workers.UvicornWorker",
-                "--reload-extra-file", "templates/index.html",
-                "--reload-extra-file", "templates/app.html",
-                "--reload-extra-file", "templates/card_general.html",
-                "--reload-extra-file", "templates/card_app_template.html",
-                "--reload-extra-file", "templates/github_integration.html"
             ],
             "jinja": true
         }

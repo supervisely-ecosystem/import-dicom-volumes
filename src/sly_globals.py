@@ -16,5 +16,3 @@ app = FastAPI()
 sly_app = create()
 
 app.mount("/sly", sly_app)
-
-
