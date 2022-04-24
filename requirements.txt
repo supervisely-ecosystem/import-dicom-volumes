@@ -1,2 +1,5 @@
 supervisely[apps]==6.16.0
 black==22.3.0
+
+#TODO: remove
+pydicom==2.3.0

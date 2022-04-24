@@ -6,10 +6,13 @@ import src.sly_globals as g
 
 logger.info("Application has been started")
 
-################
-# your code here
-################
+path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM/S66420/S1010"
 
-print(123)
 
-f.shutdown_app()
+def main():
+    print("hey there")
+    f.shutdown_app()
+
+
+if __name__ == "__main__":
+    main()
