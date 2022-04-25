@@ -25,7 +25,7 @@
                 "8000",
                 "--ws",
                 "websockets",
-                "--reload"
+                // "--reload"
             ],
             "jinja": true
         }

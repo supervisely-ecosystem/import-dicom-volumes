@@ -1,16 +1,21 @@
 import os
-from pathlib import Path
-
 from fastapi import FastAPI
-from supervisely.sly_logger import logger
-from starlette.staticfiles import StaticFiles
-from supervisely.app.fastapi import create, Jinja2Templates
+from dotenv import load_dotenv
+import supervisely as sly
 
-app_root_directory = str(Path(__file__).parent.absolute().parents[0])
-logger.info(f"App root directory: {app_root_directory}")
+app_root_directory = os.getcwd()
+sly.logger.info(f"App root directory: {app_root_directory}")
 
-# api = supervisely.Api.from_env()
+# order matters
+load_dotenv(os.path.join(app_root_directory, "debug_secret.env"))
+load_dotenv(os.path.join(app_root_directory, "debug.env"))
+
 app = FastAPI()
-sly_app = create()
-
+sly_app = sly.app.fastapi.create()
 app.mount("/sly", sly_app)
+
+api = sly.Api.from_env()
+
+# task_id = int(os.environ["TASK_ID"])
+team_id = int(os.environ["context.teamId"])
+workspace_id = int(os.environ["context.workspaceId"])
