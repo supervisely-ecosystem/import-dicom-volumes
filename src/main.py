@@ -11,6 +11,9 @@ from supervisely.volume.parsers import dicom
 
 # @TODO: new project / append to existing project
 # @TODO: test nrrd and nifty
+# @TODO: https://pydicom.github.io/pydicom/dev/auto_examples/image_processing/reslice.html
+# @TODO: https://simpleitk.readthedocs.io/en/master/link_DicomSeriesReader_docs.html
+# @TODO: reoriented = sitk.DICOMOrient(img, 'RAS')
 
 sly.logger.info("Application has been started")
 print("hey there")
