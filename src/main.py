@@ -21,14 +21,121 @@ import SimpleITK as sitk
 
 from src.dicom_helper import inspect_series
 
-path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM"
-# path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM/S66420/S1010"
+# path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM"
+path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM/S66420/S1010"
 # path = "/Users/max/work/medsi-mrt-duplicate/nrrd_example"
 # path = "/Users/max/work/medsi-mrt-duplicate/den-mrt/45130000"
 
-res = inspect_series(path)
-for col in res.columns:
-    print(col)
+series_pd = inspect_series(path)
+series_pd.to_json("./temp.json", orient="records", lines=True)
+
+reader = sitk.ImageSeriesReader()
+# dicom_names = reader.GetGDCMSeriesFileNames(path)
+reader.SetFileNames(series_pd.iloc[0]["files"])
+volume = reader.Execute()
+volume_ras = sitk.DICOMOrient(volume, "RAS")
+size = volume_ras.GetSize()
+print("volume size:", size[0], size[1], size[2])
+volume_np = sitk.GetArrayFromImage(volume_ras)
+print("shape np:", volume_np.shape)
+
+# @TODO: debug
+norm_volume_bytes = nrrd_encoder.encode(
+    volume_np,
+    header={
+        "encoding": "gzip",
+        "space": volume.system.upper(),  # @TODO: RAS
+        "space directions": volume.aligned_transformation[:3, :3].T.tolist(),
+        "space origin": volume.aligned_transformation[:3, 3].tolist(),
+    },
+    compression_level=1,
+)
+
+norm_volume_hash = get_bytes_hash(norm_volume_bytes)
+        api.image._upload_data_bulk(
+            lambda v: v, [(norm_volume_bytes, norm_volume_hash)]
+        )
+
+        [volume_result] = api.image.upload_volume(
+            {
+                "datasetId": dataset_info.id,
+                "volumes": [
+                    {
+                        "hash": norm_volume_hash,
+                        "name": f"{volume_name}.nrrd",
+                        "meta": volume_meta, #@TODO: add human readable tags
+                    },
+                ],
+            }
+        )
+
+        progress.iter_done_report()
+
+        progress = sly.Progress(
+            "Import volume slices: {}".format(volume_name), sum(data.shape)
+        )
+
+        for (plane, dimension) in zip(["sagittal", "coronal", "axial"], data.shape):
+            for i in range(dimension):
+                try:
+                    normal = {"x": 0, "y": 0, "z": 0}
+
+                    if plane == "sagittal":
+                        pixel_data = data[i, :, :]
+                        normal["x"] = 1
+                    elif plane == "coronal":
+                        pixel_data = data[:, i, :]
+                        normal["y"] = 1
+                    else:
+                        pixel_data = data[:, :, i]
+                        normal["z"] = 1
+
+                    img_bytes = nrrd_encoder.encode(
+                        pixel_data, header={"encoding": "gzip"}, compression_level=1
+                    )
+
+                    img_hash = get_bytes_hash(img_bytes)
+                    api.image._upload_data_bulk(lambda v: v, [(img_bytes, img_hash)])
+
+                    cur_img = {
+                        "hash": img_hash,
+                        "sliceIndex": i,
+                        "normal": normal,
+                    }
+
+                    api.image._upload_volume_slices_bulk_add_dict(
+                        volume_result["id"], [cur_img], None
+                    )
+
+                    images_cnt += 1
+
+                except Exception as e:
+                    exc_str = str(e)
+                    sly.logger.warn(
+                        "File skipped due to error: {}".format(exc_str),
+                        exc_info=True,
+                        extra={
+                            "exc_str": exc_str,
+                            "file_path": entry_path,
+                        },
+                    )
+
+                progress.iter_done_report()
+
+    return images_cnt
+
+# human readable tags from first dcm
+# 5 dcm files -> read to single volume
+# 106 - 186
+# volume -> RAS
+# volume_ras -> NRRD
+# slicing
+
+
+exit(0)
+
+# for col in res.columns:
+# print(col)
 # files
 # MD5 intensity hash
 # image size
@@ -39,19 +146,31 @@ for col in res.columns:
 # min intensity
 # max intensity
 
-print(res[:5])
-
 # len(res.iloc[0]['files'])
 
 reader = sitk.ImageSeriesReader()
 dicom_names = reader.GetGDCMSeriesFileNames(path)
 reader.SetFileNames(dicom_names)
 
-image = reader.Execute()
-size = image.GetSize()
+volume = reader.Execute()
+volume_ras = sitk.DICOMOrient(image, "RAS")
+
+size = volume_ras.GetSize()
 print("Image size:", size[0], size[1], size[2])
 
-# import pydicom as dicom
+volume_np = sitk.GetArrayFromImage(volume_ras)
+
+
+import pydicom
+
+tag = pydicom.tag.Tag(0x10, 0x20)
+
+# Option 1) Retrieve the keyword:
+keyword = pydicom.datadict.keyword_for_tag(tag)
+# Option 2) Retrieve the complete datadict entry:
+entry = pydicom.datadict.get_entry(tag)
+representation, multiplicity, name, is_retired, keyword = entry
+
 
 # reader = sitk.ImageFileReader()
 # reader.SetFileName(dicom_names[0])
