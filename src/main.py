@@ -3,15 +3,30 @@ import src.sly_functions as f
 import src.sly_globals as g
 import json
 import SimpleITK as sitk
+import magic
 
 from src.dicom_helper import inspect_series
 import src.nrrd_encoder as nrrd_encoder
 from src.metadata_reader import read_dicom_tags
 
 # path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM"
-path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM/S66420/S1010"
+# path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM/S66420/S1010"
+# nifti examples
+path = "/Users/max/work/medsi-mrt-duplicate/nifti"
 # path = "/Users/max/work/medsi-mrt-duplicate/nrrd_example"
 # path = "/Users/max/work/medsi-mrt-duplicate/den-mrt/45130000"
+
+
+print(
+    magic.from_file(
+        "/Users/max/work/medsi-mrt-duplicate/nrrd_example/CT-chest.nrrd", mime=True
+    )
+)
+print(
+    magic.from_file(
+        "/Users/max/work/medsi-mrt-duplicate/nifti/avg152T1_LR_nifti.nii", mime=True
+    )
+)
 
 
 def rescale_slope_intercept(value, slope, intercept):
@@ -40,9 +55,32 @@ def normalize_volume_meta(meta):
     return meta
 
 
+def get_volume_extension(path):
+    # nrrd:
+    # application/octet-stream
+    # nifti(nii):
+    # application/octet-stream
+    # dicom:
+    # "application/dicom"
+    ext = None
+    mime = magic.from_file(path, mime=True)
+    if mime == "application/dicom":
+        ext = ".dcm"
+    return ext
+
+
 series_pd = inspect_series(path)
 series_infos = json.loads(series_pd.to_json(orient="index"))
 for index_str, info in series_infos.items():
+    volume_ext = get_volume_extension(info["files"][0])
+    if volume_ext is None:
+        raise NotImplementedError(123)
+
+    #         if entry_mime == "application/dicom":
+    #             dir_has_dcm_files = True
+
+    volume_name = sly.fs.get_file_name(info["files"][0])
+
     reader = sitk.ImageSeriesReader()
     reader.SetFileNames(info["files"])
     volume = reader.Execute()
