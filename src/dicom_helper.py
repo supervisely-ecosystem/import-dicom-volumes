@@ -355,6 +355,18 @@ def inspect_series(root_dir, meta_data_keys=[], additional_column_names=[]):
     Returns
     -------
     pandas DataFrame: Each row in the data frame corresponds to a single file.
+
+    # Row example:
+    "files": [...],
+    "MD5 intensity hash": "3fb5282b280b5d74fe564f484a867e81",
+    "image size": [256, 256, 5],
+    "image spacing": [0.9765625, 0.9765625, 48.0961309269],
+    "image origin": [20.0, -149.51171875, 124.51171875],
+    "axis direction": [0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, -1.0, 0.0],
+    "pixel type": "16-bit unsigned integer gray",
+    "min intensity": 0.0,
+    "max intensity": 936.0
+
     """
     if len(meta_data_keys) != len(additional_column_names):
         raise ValueError("Number of additional column names does not match expected.")
