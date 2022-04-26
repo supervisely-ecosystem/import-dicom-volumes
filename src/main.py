@@ -10,23 +10,12 @@ import src.nrrd_encoder as nrrd_encoder
 from src.metadata_reader import read_dicom_tags
 
 # path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM"
-# path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM/S66420/S1010"
+path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM/S66420/S1010"
 # nifti examples
-path = "/Users/max/work/medsi-mrt-duplicate/nifti"
+# path = "/Users/max/work/medsi-mrt-duplicate/nifti"
+# path = "/Users/max/work/medsi-mrt-duplicate/nrrd_example"
 # path = "/Users/max/work/medsi-mrt-duplicate/nrrd_example"
 # path = "/Users/max/work/medsi-mrt-duplicate/den-mrt/45130000"
-
-
-print(
-    magic.from_file(
-        "/Users/max/work/medsi-mrt-duplicate/nrrd_example/CT-chest.nrrd", mime=True
-    )
-)
-print(
-    magic.from_file(
-        "/Users/max/work/medsi-mrt-duplicate/nifti/avg152T1_LR_nifti.nii", mime=True
-    )
-)
 
 
 def rescale_slope_intercept(value, slope, intercept):
@@ -56,6 +45,16 @@ def normalize_volume_meta(meta):
 
 
 def get_volume_extension(path):
+    # print(
+    #     magic.from_file(
+    #         "/Users/max/work/medsi-mrt-duplicate/nrrd_example/CT-chest.nrrd", mime=True
+    #     )
+    # )
+    # print(
+    #     magic.from_file(
+    #         "/Users/max/work/medsi-mrt-duplicate/nifti/avg152T1_LR_nifti.nii", mime=True
+    #     )
+    # )
     # nrrd:
     # application/octet-stream
     # nifti(nii):
