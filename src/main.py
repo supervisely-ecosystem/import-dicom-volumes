@@ -1,21 +1,7 @@
-import os
-
-# import mimetypes
 import supervisely as sly
 import src.sly_functions as f
 import src.sly_globals as g
 import json
-
-# https://github.com/InsightSoftwareConsortium/SimpleITK-Notebooks/blob/master/Python/characterize_data.py
-# from src.volume_reader import process_file
-# from supervisely.volume.parsers import dicom
-
-# @TODO: new project / append to existing project
-# @TODO: test nrrd and nifty
-# @TODO: https://pydicom.github.io/pydicom/dev/auto_examples/image_processing/reslice.html
-# @TODO: https://simpleitk.readthedocs.io/en/master/link_DicomSeriesReader_docs.html
-# @TODO: reoriented = sitk.DICOMOrient(img, 'RAS')
-
 import SimpleITK as sitk
 
 from src.dicom_helper import inspect_series
