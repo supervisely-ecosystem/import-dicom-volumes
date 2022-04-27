@@ -8,7 +8,7 @@ print("hey there")
 
 
 project_name = "test"
-dataset_name = "ds-01"
+dataset_name = "ds-02"
 
 project = g.api.project.get_or_create(
     g.workspace_id, project_name, type=sly.ProjectType.VOLUMES
@@ -38,7 +38,10 @@ for (files, meta) in series_infos:
         )
         continue
     name = f"{sly.fs.get_file_name(item_path)}.nrrd"
-    res = g.api.volume.upload_dicom_serie_paths(dataset.id, name, files, meta)
-
+    progress = sly.Progress(f"Import volume and slices: {name}", sum(meta["shape"]) + 1)
+    res = g.api.volume.upload_dicom_serie_paths(
+        dataset.id, name, files, meta, progress.iters_done_report
+    )
+    # TODO: upload dicom tags
 
 f.shutdown_app()
