@@ -8,7 +8,7 @@ sly.logger.info("Application has been started")
 print("hey there")
 
 project_name = "test"
-dataset_name = "ds-02"
+dataset_name = "ds-LPS"
 
 project = g.api.project.get_or_create(
     g.workspace_id, project_name, type=sly.ProjectType.VOLUMES
