@@ -7,7 +7,7 @@ import SimpleITK as sitk
 sly.logger.info("Application has been started")
 print("hey there")
 
-project_name = "test-RAS"
+project_name = "test-RAS-xyz-volume"
 dataset_name = "ds"
 # @TODO: add version to volume meta!!
 
