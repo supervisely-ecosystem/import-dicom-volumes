@@ -7,9 +7,10 @@ import SimpleITK as sitk
 sly.logger.info("Application has been started")
 print("hey there")
 
-project_name = "test-RAS-xyz-volume"
-dataset_name = "ds-fix-shape"
+project_name = "test"
+dataset_name = "ds-lera"
 # @TODO: add version to volume meta!!
+# @TODO: add anonymize flag in modal window
 
 project = g.api.project.get_or_create(
     g.workspace_id, project_name, type=sly.ProjectType.VOLUMES
@@ -23,14 +24,15 @@ dataset = g.api.dataset.get_or_create(project.id, dataset_name)
 # path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM/S66420/S1010"
 # path = "/Users/max/work/dicom-private-test/1.2.840.113704.1.111.6000.1606737510.1"
 path = "/Users/max/work/dicom-for-ecosystem/lera"
-# nifti examples
-# path = "/Users/max/work/medsi-mrt-duplicate/nifti"
-# path = "/Users/max/work/medsi-mrt-duplicate/nrrd_example"
-# path = "/Users/max/work/medsi-mrt-duplicate/nrrd_example"
-# path = "/Users/max/work/medsi-mrt-duplicate/den-mrt/45130000"
 
+# nrrd - todo later
+# path = "/Users/max/work/ras-dcm-test-dimentions-private"
+# series_infos = sly.volume.inspect_nrrd_series(path)
+# exit(0)
 
-series_infos = sly.volume.inspect_series(path)
+# test dicom examples
+
+series_infos = sly.volume.inspect_dicom_series(path)
 
 for serie_id, files in series_infos.items():
     item_path = files[0]
