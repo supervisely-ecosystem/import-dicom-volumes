@@ -7,7 +7,7 @@ import SimpleITK as sitk
 sly.logger.info("Application has been started")
 print("hi there")
 
-project_name = "CT-chest"
+project_name = "lera-brain"
 dataset_name = "ds"
 # @TODO: add version to volume meta!!
 # @TODO: add anonymize flag in modal window
@@ -21,21 +21,21 @@ if dataset is not None:
 dataset = g.api.dataset.get_or_create(project.id, dataset_name)
 
 
-# test nrrd example
-# path = "/Users/max/work/ras-dcm-test-dimentions-private"
-path = "/Users/max/work/dicom-examples/dicom-for-ecosystem/nrrd"
-nrrd_paths = sly.volume.inspect_nrrd_series(path)
-for nrrd_path in nrrd_paths:
-    name = sly.fs.get_file_name_with_ext(nrrd_path)
-    g.api.volume.upload_nrrd_serie_path(dataset.id, name, nrrd_path, True)
-sly.app.fastapi.shutdown()
-exit(0)
+# # test nrrd example
+# # path = "/Users/max/work/ras-dcm-test-dimentions-private"
+# path = "/Users/max/work/dicom-examples/dicom-for-ecosystem/nrrd"
+# nrrd_paths = sly.volume.inspect_nrrd_series(path)
+# for nrrd_path in nrrd_paths:
+#     name = sly.fs.get_file_name_with_ext(nrrd_path)
+#     g.api.volume.upload_nrrd_serie_path(dataset.id, name, nrrd_path, True)
+# sly.app.fastapi.shutdown()
+# exit(0)
 
 # test dicom examples
 # path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM"
 # path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM/S66420/S1010"
 # path = "/Users/max/work/dicom-private-test/1.2.840.113704.1.111.6000.1606737510.1"
-# path = "/Users/max/work/dicom-for-ecosystem/lera"
+path = "/Users/max/work/dicom-examples/dicom-for-ecosystem/lera"
 series_infos = sly.volume.inspect_dicom_series(path)
 for serie_id, files in series_infos.items():
     item_path = files[0]
