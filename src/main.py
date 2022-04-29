@@ -42,6 +42,6 @@ for serie_id, files in series_infos.items():
 
     name = f"{sly.fs.get_file_name(item_path)}.nrrd"
     res = g.api.volume.upload_dicom_serie_paths(dataset.id, name, files, True)
-    # TODO: upload dicom tags
+    # @TODO: check res
 
 sly.app.fastapi.shutdown()
