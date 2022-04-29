@@ -21,7 +21,8 @@ dataset = g.api.dataset.get_or_create(project.id, dataset_name)
 
 # path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM"
 # path = "/Users/max/work/medsi-mrt-duplicate/mrt-2/DICOM/S66420/S1010"
-path = "/Users/max/work/dicom-private-test/1.2.840.113704.1.111.6000.1606737510.1"
+# path = "/Users/max/work/dicom-private-test/1.2.840.113704.1.111.6000.1606737510.1"
+path = "/Users/max/work/dicom-for-ecosystem/lera"
 # nifti examples
 # path = "/Users/max/work/medsi-mrt-duplicate/nifti"
 # path = "/Users/max/work/medsi-mrt-duplicate/nrrd_example"
