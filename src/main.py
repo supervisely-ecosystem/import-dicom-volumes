@@ -7,7 +7,7 @@ import SimpleITK as sitk
 sly.logger.info("Application has been started")
 print("hi there")
 
-project_name = "nrrd"
+project_name = "CT-chest"
 dataset_name = "ds"
 # @TODO: add version to volume meta!!
 # @TODO: add anonymize flag in modal window
@@ -22,7 +22,8 @@ dataset = g.api.dataset.get_or_create(project.id, dataset_name)
 
 
 # test nrrd example
-path = "/Users/max/work/ras-dcm-test-dimentions-private"
+# path = "/Users/max/work/ras-dcm-test-dimentions-private"
+path = "/Users/max/work/dicom-examples/dicom-for-ecosystem/nrrd"
 nrrd_paths = sly.volume.inspect_nrrd_series(path)
 for nrrd_path in nrrd_paths:
     name = sly.fs.get_file_name_with_ext(nrrd_path)
