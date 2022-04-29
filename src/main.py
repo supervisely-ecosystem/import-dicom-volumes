@@ -8,7 +8,7 @@ sly.logger.info("Application has been started")
 print("hey there")
 
 project_name = "test-RAS-xyz-volume"
-dataset_name = "ds"
+dataset_name = "ds-fix-shape"
 # @TODO: add version to volume meta!!
 
 project = g.api.project.get_or_create(
