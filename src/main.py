@@ -5,7 +5,7 @@ import src.sly_globals as g
 import SimpleITK as sitk
 
 sly.logger.info("Application has been started")
-print("hey there")
+print("hi there")
 
 project_name = "nrrd"
 dataset_name = "ds"
