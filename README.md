@@ -65,7 +65,7 @@ As a result we will get project `my_volumes_project` with 1 dataset named: `ds0`
 
 **Step 3.** Press the Run button in the modal window
 
-<img src="https://i.imgur.com/j5ckZk2.png" width="80%" style='padding-top: 10px'>
+<img src="https://i.imgur.com/lpijBjZ.png" width="80%" style='padding-top: 10px'>
 
 **Step 4.** After running the application, you will be redirected to the Tasks page. Once application processing has finished, your project will become available. Click on the project name to open it.
 
