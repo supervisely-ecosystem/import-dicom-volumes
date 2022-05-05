@@ -1,6 +1,6 @@
 <div align="center" markdown>
 
-<img src="" style="width: 100%;"/>
+<img src="https://i.imgur.com/qZlLpWs.png" style="width: 100%;"/>
 
 # Import DICOM Volumes
 
