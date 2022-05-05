@@ -12,8 +12,8 @@
     "anonymizeVolumes": true
   },
   "task_location": "workspace_tasks",
-  "icon": "https://imgur.com/a9u0M3Y.png",
-  "icon_background": "#FFFFFF",
+  "icon": "https://i.imgur.com/tdJyETN.png",
+  "icon_cover": true
   "headless": true,
   "instance_version": "6.4.48",
   "context_menu": {
