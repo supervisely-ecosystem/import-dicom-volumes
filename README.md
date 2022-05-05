@@ -73,6 +73,6 @@ As a result we will get project `my_volumes_project` with 1 dataset named: `ds0`
 
 ### Demo
 Example of uploading a flat set of images:
-![](https://i.imgur.com/EkLt9ii.gif)
+![](https://i.imgur.com/OS7OUym.gif)
 
 
