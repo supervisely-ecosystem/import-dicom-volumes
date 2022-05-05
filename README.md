@@ -23,13 +23,17 @@
 # Overview
 
 Import volumes in `DICOM` or `NRRD` format without annotations. Files in `DICOM` format will be automatically converted to `NRRD` format during import.
+App is compatible with `.DCM` and `.NRRD` formats, dicom files without `.dcm` extension are also compatible.
 
 #### Input files structure
 
-You can upload directory or archive. If you are uploading archive, it must contain only root directory on the top level.
+You can upload a directory or an archive. If you are uploading an archive, it must contain a single top-level directory.
+Structure of the directory is not important - app will find all the series and process them.
 
 Directory name defines project name. All volumes in root directory will be moved to dataset with name: `ds0`. Volumes can be placed in any location inside root directory.
- 
+
+Project directory example:
+
 ```
 .
 my_volumes_project

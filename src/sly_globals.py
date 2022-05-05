@@ -1,5 +1,6 @@
 import os
 import sys
+from distutils.util import strtobool
 from pathlib import Path
 
 import supervisely as sly
@@ -29,6 +30,7 @@ INPUT_DIR: str = os.environ.get("modal.state.slyFolder", None)
 INPUT_FILE: str = os.environ.get("modal.state.slyFile", None)
 
 DEFAULT_DATASET_NAME = "ds0"
+ANONYMIZE_VOLUMES = bool(strtobool(os.getenv("modal.state.anonymizeVolumes")))
 
 STORAGE_DIR: str = my_app.data_dir
 mkdir(STORAGE_DIR, True)
