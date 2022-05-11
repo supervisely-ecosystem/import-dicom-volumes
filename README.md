@@ -72,7 +72,7 @@ As a result we will get project `my_volumes_project` with 1 dataset named: `ds0`
 <img src="https://i.imgur.com/qZvcLOU.png" width="80%" style='padding-top: 10px'>
 
 ### Demo
-Example of uploading a flat set of images:
+Example of uploading volumes:
 ![](https://i.imgur.com/OS7OUym.gif)
 
 
