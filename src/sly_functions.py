@@ -9,6 +9,12 @@ from supervisely.io.fs import get_file_name_with_ext, silent_remove
 import sly_globals as g
 
 
+def get_project_name_from_input_path(input_path: str) -> str:
+    """Returns project name from target sly folder name."""
+    full_path_dir = os.path.dirname(input_path)
+    return os.path.basename(full_path_dir)
+
+
 def update_progress(count, api: sly.Api, task_id: int, progress: sly.Progress) -> None:
     count = min(count, progress.total - progress.current)
     progress.iters_done(count)
