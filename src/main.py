@@ -15,7 +15,7 @@ def import_images_groups(
     project_dir = f.download_data_from_team_files(
         api=api, task_id=task_id, save_path=g.STORAGE_DIR
     )
-    project_name = f.get_project_name_from_input_path(g.INPUT_PATH) if len(g.OUTPUT_PROJECT_NAME) == 0 else g.OUTPUT_PROJECT_NAME
+    project_name = f.get_project_name_from_input_path(g.INPUT_DIR) if len(g.OUTPUT_PROJECT_NAME) == 0 else g.OUTPUT_PROJECT_NAME
 
     project = g.api.project.create(
         workspace_id=g.WORKSPACE_ID,
