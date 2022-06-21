@@ -15,7 +15,7 @@ def import_images_groups(
     project_dir = f.download_data_from_team_files(
         api=api, task_id=task_id, save_path=g.STORAGE_DIR
     )
-    project_name = os.path.basename(project_dir)
+    project_name = f.get_project_name_from_input_path(g.INPUT_PATH) if len(g.OUTPUT_PROJECT_NAME) == 0 else g.OUTPUT_PROJECT_NAME
 
     project = g.api.project.create(
         workspace_id=g.WORKSPACE_ID,
@@ -52,7 +52,14 @@ def import_images_groups(
         g.api.volume.upload_nrrd_serie_path(
             dataset_id=dataset.id, name=name, path=nrrd_path, log_progress=True
         )
-
+    
+    if g.REMOVE_SOURCE:
+        api.file.remove(team_id=g.TEAM_ID, path=g.INPUT_PATH)
+        source_dir_name = g.INPUT_PATH.lstrip("/").rstrip("/")
+        sly.logger.info(
+            msg=f"Source directory: '{source_dir_name}' was successfully removed."
+        )
+    
     g.my_app.stop()
 
 
