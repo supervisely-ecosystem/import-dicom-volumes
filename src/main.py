@@ -55,7 +55,7 @@ def import_images_groups(
     
     if g.REMOVE_SOURCE:
         api.file.remove(team_id=g.TEAM_ID, path=g.INPUT_DIR)
-        source_dir_name = g.INPUT_PATH.lstrip("/").rstrip("/")
+        source_dir_name = g.INPUT_DIR.lstrip("/").rstrip("/")
         sly.logger.info(
             msg=f"Source directory: '{source_dir_name}' was successfully removed."
         )
