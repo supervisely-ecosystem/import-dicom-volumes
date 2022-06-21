@@ -28,6 +28,9 @@ TASK_ID = int(os.environ["TASK_ID"])
 
 INPUT_DIR: str = os.environ.get("modal.state.slyFolder", None)
 INPUT_FILE: str = os.environ.get("modal.state.slyFile", None)
+  
+OUTPUT_PROJECT_NAME = os.environ.get("modal.state.project_name", "")
+REMOVE_SOURCE = bool(strtobool(os.getenv("modal.state.remove_source")))
 
 DEFAULT_DATASET_NAME = "ds0"
 ANONYMIZE_VOLUMES = bool(strtobool(os.getenv("modal.state.anonymizeVolumes")))
