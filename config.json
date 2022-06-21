@@ -1,5 +1,5 @@
 {
-  "name": "Import DICOM volumes",
+  "name": "Import DICOM Volumes",
   "type": "app",
   "categories": [
     "import",
