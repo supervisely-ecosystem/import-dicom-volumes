@@ -1,6 +1,6 @@
 <div align="center" markdown>
 
-<img src="https://i.imgur.com/qZlLpWs.png" style="width: 100%;"/>
+<img src="https://github.com/supervisely-ecosystem/import-dicom-volumes/releases/download/v1.0.0/poster.png" style="width: 100%;"/>
 
 # Import DICOM Volumes
 
