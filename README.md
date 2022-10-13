@@ -24,6 +24,13 @@
 Import volumes in `DICOM` or `NRRD` format without annotations. Files in `DICOM` format will be automatically converted to `NRRD` format during import.
 App is compatible with `.DCM` and `.NRRD` formats, dicom files without `.dcm` extension are also compatible.
 
+🏋️ Starting from version `v1.1.0` application supports import from special directory on your local computer. It is made for Enterprise Edition customers who need to upload tens or even hundreds of gigabytes of data without using drag-ang-drop mechanism:
+
+1. Run agent on your computer where data is stored.
+2. Copy your data to special folder on your computer that was created by agent. Agent mounts this directory to your Supervisely instance and it becomes accessible in Team Files. Learn more [in documentation](https://github.com/supervisely/docs/blob/master/customization/agents/agent-storage/agent-storage.md).
+3. Go to `Team Files` -> `Supervisely Agent` and find your folder there.
+4. Right click to open context menu and start app. Now app will upload data directly from your computer to the platform.
+
 #### Input files structure
 
 You can upload a directory or an archive. If you are uploading an archive, it must contain a single top-level directory.
