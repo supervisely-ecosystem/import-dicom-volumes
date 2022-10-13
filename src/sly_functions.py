@@ -11,8 +11,7 @@ import sly_globals as g
 
 def get_project_name_from_input_path(input_path: str) -> str:
     """Returns project name from target sly folder name."""
-    full_path_dir = os.path.dirname(input_path)
-    return os.path.basename(full_path_dir)
+    return os.path.basename(input_path)
 
 
 def update_progress(count, api: sly.Api, task_id: int, progress: sly.Progress) -> None:
@@ -40,9 +39,13 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
     """Download data from remote directory in Team Files."""
     project_path = None
     if g.INPUT_DIR is not None:
+        if g.IS_ON_AGENT:
+            agent_id, cur_files_path = api.file.parse_agent_id_and_path(g.INPUT_DIR)
+        else:
+            cur_files_path = g.INPUT_DIR
         remote_path = g.INPUT_DIR
         project_path = os.path.join(
-            save_path, os.path.basename(os.path.normpath(remote_path))
+            save_path, os.path.basename(os.path.normpath(cur_files_path))
         )
         sizeb = api.file.get_directory_size(g.TEAM_ID, remote_path)
         progress_cb = get_progress_cb(
@@ -60,8 +63,12 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
         )
 
     elif g.INPUT_FILE is not None:
+        if g.IS_ON_AGENT:
+            agent_id, cur_files_path = api.file.parse_agent_id_and_path(g.INPUT_FILE)
+        else:
+            cur_files_path = g.INPUT_FILE
         remote_path = g.INPUT_FILE
-        save_archive_path = os.path.join(save_path, get_file_name_with_ext(remote_path))
+        save_archive_path = os.path.join(save_path, get_file_name_with_ext(cur_files_path))
         sizeb = api.file.get_info_by_path(g.TEAM_ID, remote_path).sizeb
         progress_cb = get_progress_cb(
             api=api,

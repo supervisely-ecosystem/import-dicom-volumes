@@ -1,5 +1,3 @@
-import os
-
 import supervisely as sly
 
 import sly_functions as f
@@ -15,7 +13,7 @@ def import_images_groups(
     project_dir = f.download_data_from_team_files(
         api=api, task_id=task_id, save_path=g.STORAGE_DIR
     )
-    project_name = f.get_project_name_from_input_path(g.INPUT_DIR) if len(g.OUTPUT_PROJECT_NAME) == 0 else g.OUTPUT_PROJECT_NAME
+    project_name = f.get_project_name_from_input_path(project_dir) if len(g.OUTPUT_PROJECT_NAME) == 0 else g.OUTPUT_PROJECT_NAME
 
     project = g.api.project.create(
         workspace_id=g.WORKSPACE_ID,
@@ -53,7 +51,7 @@ def import_images_groups(
             dataset_id=dataset.id, name=name, path=nrrd_path, log_progress=True
         )
     
-    if g.REMOVE_SOURCE:
+    if g.REMOVE_SOURCE and not g.IS_ON_AGENT:
         api.file.remove(team_id=g.TEAM_ID, path=g.INPUT_DIR)
         source_dir_name = g.INPUT_DIR.lstrip("/").rstrip("/")
         sly.logger.info(

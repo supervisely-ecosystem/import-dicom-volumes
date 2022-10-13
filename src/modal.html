@@ -11,7 +11,7 @@
       <el-input placeholder="Enter Project Name" v-model="state.project_name"></el-input>
         
     </div>
-    <div class="fflex align-start">
+    <div class="fflex align-start" v-if="!state.prefNodeId">
         <el-checkbox v-model="state.remove_source" class="mt10 mr10"></el-checkbox>
         <sly-field class="mt20"
                    title="Remove temporary files after successful import"
