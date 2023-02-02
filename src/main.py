@@ -38,12 +38,18 @@ class MyImport(sly.app.Import):
         if context.is_directory is False:
             shutil.unpack_archive(project_dir, STORAGE_DIR)
             silent_remove(project_dir)
-            project_name = os.listdir(STORAGE_DIR)[0]
+            project_name = (
+                os.listdir(STORAGE_DIR)[0] if len(OUTPUT_PROJECT_NAME) == 0 else OUTPUT_PROJECT_NAME
+            )
             if len(os.listdir(STORAGE_DIR)) > 1:
                 raise Exception("There must be only 1 project directory in the archive")
             project_dir = os.path.join(STORAGE_DIR, project_name)
         else:
-            project_name = os.path.basename(project_dir)
+            project_name = (
+                os.path.basename(project_dir)
+                if len(OUTPUT_PROJECT_NAME) == 0
+                else OUTPUT_PROJECT_NAME
+            )
 
         project = api.project.create(
             workspace_id=context.workspace_id,
