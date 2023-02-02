@@ -87,8 +87,8 @@ class MyImport(sly.app.Import):
             else:
                 path_to_remove = INPUT_FILE
             api.file.remove(team_id=context.team_id, path=path_to_remove)
-            source_dir_name = INPUT_DIR.lstrip("/").rstrip("/")
-            sly.logger.info(msg=f"Source directory: '{source_dir_name}' was successfully removed.")
+            source_name = path_to_remove.lstrip("/").rstrip("/")
+            sly.logger.info(msg=f"Source: '{source_name}' was successfully removed.")
 
 
 app = MyImport()
