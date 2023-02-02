@@ -43,7 +43,7 @@ class MyImport(sly.app.Import):
             )
             if len(os.listdir(STORAGE_DIR)) > 1:
                 raise Exception("There must be only 1 project directory in the archive")
-            project_dir = os.path.join(STORAGE_DIR, project_name)
+            project_dir = os.path.join(STORAGE_DIR, os.listdir(STORAGE_DIR)[0])
         else:
             project_name = (
                 os.path.basename(project_dir)
