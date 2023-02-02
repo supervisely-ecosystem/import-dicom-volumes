@@ -82,9 +82,11 @@ class MyImport(sly.app.Import):
             )
 
         if REMOVE_SOURCE and not IS_ON_AGENT:
-            sly.logger.info(f"7777777777777777777777777777777     {INPUT_DIR}")
-            sly.logger.info(f"7777777777777777777777777777777     {os.listdir(INPUT_DIR)}")
-            api.file.remove(team_id=context.team_id, path=INPUT_DIR)
+            if INPUT_DIR is not None:
+                path_to_remove = INPUT_DIR
+            else:
+                path_to_remove = INPUT_FILE
+            api.file.remove(team_id=context.team_id, path=path_to_remove)
             source_dir_name = INPUT_DIR.lstrip("/").rstrip("/")
             sly.logger.info(msg=f"Source directory: '{source_dir_name}' was successfully removed.")
 
