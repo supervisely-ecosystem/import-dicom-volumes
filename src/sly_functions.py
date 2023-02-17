@@ -4,7 +4,7 @@ import shutil
 from typing import Callable
 
 import supervisely as sly
-from supervisely.io.fs import get_file_name_with_ext, silent_remove
+from supervisely.io.fs import get_file_name_with_ext, get_file_ext, get_file_name, silent_remove
 
 import sly_globals as g
 
@@ -94,3 +94,20 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
         project_name = os.listdir(save_path)[0]
         project_path = os.path.join(save_path, project_name)
     return project_path
+
+def generate_free_name(used_names, possible_name, with_ext=False, extend_used_names=False):
+    res_name = possible_name
+    new_suffix = 1
+    while res_name in used_names:
+        if with_ext is True:
+            res_name = "{}_{:02d}{}".format(
+                get_file_name(possible_name),
+                new_suffix,
+                get_file_ext(possible_name),
+            )
+        else:
+            res_name = "{}_{:02d}".format(possible_name, new_suffix)
+        new_suffix += 1
+    if extend_used_names:
+        used_names.add(res_name)
+    return 
