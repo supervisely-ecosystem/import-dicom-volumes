@@ -6,7 +6,7 @@ import sly_globals as g
 
 @g.my_app.callback("import-dicom-volumes")
 @sly.timeit
-def import_images_groups(
+def import_dicom_volumes(
     api: sly.Api, task_id: int, context: dict, state: dict, app_logger
 ) -> None:
 
@@ -28,7 +28,7 @@ def import_images_groups(
     )
 
     used_volumes_names = []
-    
+
     # DICOM
     series_infos = sly.volume.inspect_dicom_series(root_dir=project_dir)
     for serie_id, files in series_infos.items():
@@ -36,8 +36,10 @@ def import_images_groups(
         if sly.volume.get_extension(path=item_path) is None:
             sly.logger.warn(f"Can not recognize file extension {item_path}, serie will be skipped")
             continue
-        name = f"{sly.fs.get_file_name(path=item_path)}.nrrd"
-        name = f.generate_free_name(used_names=used_volumes_names, possible_name=name, with_ext=True)
+        name = f"{serie_id}.nrrd"
+        name = f.generate_free_name(
+            used_names=used_volumes_names, possible_name=name, with_ext=True
+        )
         used_volumes_names.append(name)
         g.api.volume.upload_dicom_serie_paths(
             dataset_id=dataset.id,
@@ -51,7 +53,9 @@ def import_images_groups(
     nrrd_paths = sly.volume.inspect_nrrd_series(root_dir=project_dir)
     for nrrd_path in nrrd_paths:
         name = sly.fs.get_file_name_with_ext(path=nrrd_path)
-        name = f.generate_free_name(used_names=used_volumes_names, possible_name=name, with_ext=True)
+        name = f.generate_free_name(
+            used_names=used_volumes_names, possible_name=name, with_ext=True
+        )
         used_volumes_names.append(name)
         g.api.volume.upload_nrrd_serie_path(
             dataset_id=dataset.id, name=name, path=nrrd_path, log_progress=True

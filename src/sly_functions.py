@@ -4,7 +4,8 @@ import shutil
 from typing import Callable
 
 import supervisely as sly
-from supervisely.io.fs import get_file_name_with_ext, get_file_ext, get_file_name, silent_remove
+from supervisely.io.fs import (get_file_ext, get_file_name,
+                               get_file_name_with_ext, silent_remove)
 
 import sly_globals as g
 
@@ -44,9 +45,7 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
         else:
             cur_files_path = g.INPUT_DIR
         remote_path = g.INPUT_DIR
-        project_path = os.path.join(
-            save_path, os.path.basename(os.path.normpath(cur_files_path))
-        )
+        project_path = os.path.join(save_path, os.path.basename(os.path.normpath(cur_files_path)))
         sizeb = api.file.get_directory_size(g.TEAM_ID, remote_path)
         progress_cb = get_progress_cb(
             api=api,
@@ -86,14 +85,13 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
         shutil.unpack_archive(save_archive_path, save_path)
         silent_remove(save_archive_path)
         if len(os.listdir(save_path)) > 1:
-            g.my_app.logger.error(
-                "There must be only 1 project directory in the archive"
-            )
+            g.my_app.logger.error("There must be only 1 project directory in the archive")
             raise Exception("There must be only 1 project directory in the archive")
 
         project_name = os.listdir(save_path)[0]
         project_path = os.path.join(save_path, project_name)
     return project_path
+
 
 def generate_free_name(used_names, possible_name, with_ext=False, extend_used_names=False):
     res_name = possible_name
@@ -110,4 +108,4 @@ def generate_free_name(used_names, possible_name, with_ext=False, extend_used_na
         new_suffix += 1
     if extend_used_names:
         used_names.add(res_name)
-    return 
+    return res_name
