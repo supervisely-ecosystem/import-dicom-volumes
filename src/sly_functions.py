@@ -84,11 +84,15 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
         )
         shutil.unpack_archive(save_archive_path, save_path)
         silent_remove(save_archive_path)
-        if not len(os.listdir(save_path)) == 1:
-            g.my_app.logger.error("There must be only 1 project directory in the archive")
-            raise Exception("There must be only 1 project directory in the archive")
+        dir_list = os.listdir(save_path)
+        if len(dir_list) != 1:          
+            g.my_app.logger.error("The archive should contain only 1 project directory at the root level")
+            raise Exception("The archive should contain only 1 project directory at the root level")
+        if not os.path.isdir(os.path.join(save_path, dir_list[0])):
+            g.my_app.logger.error("The archive should contain only the project directory at the root level")
+            raise Exception("The archive should contain only the project directory at the root level")
 
-        project_name = os.listdir(save_path)[0]
+        project_name = dir_list[0]
         project_path = os.path.join(save_path, project_name)
     return project_path
 
