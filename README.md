@@ -63,22 +63,22 @@ As a result we will get project `my_volumes_project` with 1 dataset named: `ds0`
 
 **Step 1.** Add [Import DICOM Volumes](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/import-dicom-volumes) app to your team from Ecosystem
 
-<img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/import-dicom-volumes" src="https://i.imgur.com/zY6yG0N.png" width="350px" style='padding-bottom: 10px'/>
+<img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/import-dicom-volumes" src="media/htr1.png" width="350px" style='padding-bottom: 10px'/>
 
 **Step 2.** Run the application from the context menu of the directory with images on Team Files page
 
-<img src="https://i.imgur.com/ngEGmHJ.png" width="80%" style='padding-top: 10px'>  
+<img src="media/htr2.png" width="80%" style='padding-top: 10px'>  
 
 **Step 3.** Press the Run button in the modal window
 
-<img src="https://i.imgur.com/lpijBjZ.png" width="80%" style='padding-top: 10px'>
+<img src="media/htr3.png" width="80%" style='padding-top: 10px'>
 
 **Step 4.** After running the application, you will be redirected to the Tasks page. Once application processing has finished, your project will become available. Click on the project name to open it.
 
-<img src="https://i.imgur.com/qZvcLOU.png" width="80%" style='padding-top: 10px'>
+<img src="media/htr4.png" width="80%" style='padding-top: 10px'>
 
 ### Demo
 Example of uploading volumes:
-![](https://i.imgur.com/OS7OUym.gif)
+![](media/demo.gif)
 
 
