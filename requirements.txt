@@ -1,2 +1,0 @@
-supervisely==6.70.15
-black==22.3.0
