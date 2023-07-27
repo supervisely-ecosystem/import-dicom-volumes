@@ -1,34 +1,34 @@
 {
-  "name": "Import DICOM Volumes",
-  "type": "app",
-  "categories": [
-    "import",
-    "dicom",
-    "essentials"
-  ],
-  "description": "Import volumes in DICOM and NRRD formats without annotations",
-  "docker_image": "supervisely/base-py-sdk:6.72.55",
-  "main_script": "src/main.py",
-  "modal_template": "src/modal.html",
-  "modal_template_state": {
-    "anonymizeVolumes": true,
-    "remove_source": true,
-    "project_name": ""
-  },
-  "task_location": "workspace_tasks",
-  "icon": "https://github.com/supervisely-ecosystem/import-dicom-volumes/releases/download/v1.0.0/icon.png",
-  "icon_cover": true,
-  "poster": "https://github.com/supervisely-ecosystem/import-dicom-volumes/releases/download/v1.0.0/poster.png",
-  "headless": true,
-  "min_agent_version": "6.7.4",
-  "min_instance_version": "6.5.46",
-  "context_menu": {
-    "context_category": "Import",
-    "target": [
-      "files_folder",
-      "files_file",
-      "agent_folder",
-      "agent_file"
-    ]
-  }
+    "name": "Import DICOM Volumes",
+    "type": "app",
+    "categories": [
+        "import",
+        "dicom",
+        "essentials"
+    ],
+    "description": "Import volumes in DICOM and NRRD formats without annotations",
+    "docker_image": "supervisely/import-export:0.0.1",
+    "main_script": "src/main.py",
+    "modal_template": "src/modal.html",
+    "modal_template_state": {
+        "anonymizeVolumes": true,
+        "remove_source": true,
+        "project_name": ""
+    },
+    "task_location": "workspace_tasks",
+    "icon": "https://github.com/supervisely-ecosystem/import-dicom-volumes/releases/download/v1.0.0/icon.png",
+    "icon_cover": true,
+    "poster": "https://github.com/supervisely-ecosystem/import-dicom-volumes/releases/download/v1.0.0/poster.png",
+    "headless": true,
+    "min_agent_version": "6.7.4",
+    "min_instance_version": "6.5.46",
+    "context_menu": {
+        "context_category": "Import",
+        "target": [
+            "files_folder",
+            "files_file",
+            "agent_folder",
+            "agent_file"
+        ]
+    }
 }
