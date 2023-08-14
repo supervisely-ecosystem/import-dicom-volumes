@@ -39,6 +39,29 @@ def get_progress_cb(
 def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) -> str:
     """Download data from remote directory in Team Files."""
     project_path = None
+    if INPUT_DIR:
+        listdir = api.file.listdir(g.TEAM_ID, INPUT_DIR)
+        if len(listdir) == 1 and sly.fs.get_file_ext(listdir[0]) in [".zip", ".tar"]:
+            sly.logger.info("Folder mode is selected, but archive file is uploaded.")
+            sly.logger.info("Switching to file mode.")
+            INPUT_DIR, INPUT_FILE = None, os.path.join(INPUT_DIR, listdir[0])
+    elif INPUT_FILE:
+        if sly.fs.get_file_ext(INPUT_FILE) not in [".zip", ".tar"]:
+            parent_dir, _ = os.path.split(INPUT_FILE)
+            if os.path.basename(parent_dir) in ["ann", "mask", "volume"]:
+                parent_dir = os.path.dirname(parent_dir)
+            if not parent_dir.endswith("/"):
+                parent_dir += "/"
+            sly.logger.info(f"parent_dir: {parent_dir}")
+            listdir = api.file.listdir(g.TEAM_ID, parent_dir)
+            file_names = [os.path.basename(file) for file in listdir]
+            if "meta.json" in file_names:
+                sly.logger.info("File mode is selected, but directory is uploaded.")
+                sly.logger.info("Switching to folder mode.")
+                INPUT_DIR, INPUT_FILE = parent_dir, None
+            else:
+                raise Exception("File mode is selected, but uploaded file is not an archive.")
+        
     if g.INPUT_DIR is not None:
         if g.IS_ON_AGENT:
             agent_id, cur_files_path = api.file.parse_agent_id_and_path(g.INPUT_DIR)
