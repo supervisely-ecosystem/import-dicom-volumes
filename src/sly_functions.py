@@ -51,7 +51,7 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
         if sly.fs.get_file_ext(g.INPUT_FILE) not in [".zip", ".tar"]:
             parent_dir, _ = os.path.split(g.INPUT_FILE)
             if os.path.basename(parent_dir) in ["ann", "mask", "volume"]:
-                parent_dir = os.path.dirname(parent_dir)
+                parent_dir = os.path.dirname(os.path.dirname(parent_dir))
             if not parent_dir.endswith("/"):
                 parent_dir += "/"
             sly.logger.info(f"parent_dir: {parent_dir}")
