@@ -113,6 +113,7 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
             raise Exception("Unsupported archive extension. Supported extensions: zip, tar")
         shutil.unpack_archive(save_archive_path, extrack_dir)
         silent_remove(save_archive_path)
+        sly.fs.remove_junk_from_dir(save_path)
         dir_list = os.listdir(save_path)
         if len(dir_list) != 1:          
             g.my_app.logger.error("The archive should contain only 1 project directory at the root level")
