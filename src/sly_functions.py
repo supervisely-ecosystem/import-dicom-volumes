@@ -61,6 +61,8 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
             listdir = api.file.listdir(g.TEAM_ID, parent_dir)
             if len(listdir) > 1:
                 curr_path = parent_dir
+            elif len(listdir) == 1 and api.file.exists(g.TEAM_ID, curr_path):
+                curr_path = parent_dir
             if not curr_path.endswith("/"):
                 curr_path += "/"
             sly.logger.info(f"project_dir: {curr_path}")
