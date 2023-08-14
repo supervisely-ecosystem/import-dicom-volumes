@@ -49,20 +49,24 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
             g.INPUT_DIR, g.INPUT_FILE = None, os.path.join(g.INPUT_DIR, listdir[0])
     elif g.INPUT_FILE:
         if sly.fs.get_file_ext(g.INPUT_FILE) not in [".zip", ".tar"]:
-            parent_dir, _ = os.path.split(g.INPUT_FILE)
-            if os.path.basename(parent_dir) in ["ann", "mask", "volume"]:
-                parent_dir = os.path.dirname(os.path.dirname(parent_dir))
+            curr_path = g.INPUT_FILE
+            parent_dir = os.path.dirname(curr_path)
+            grandparent_dir = os.path.dirname(parent_dir)
+            while grandparent_dir != "/import/import-dicom-volumes":
+                curr_path = os.path.dirname(curr_path)
+                parent_dir = os.path.dirname(curr_path)
+                grandparent_dir = os.path.dirname(parent_dir)
             if not parent_dir.endswith("/"):
                 parent_dir += "/"
-            sly.logger.info(f"parent_dir: {parent_dir}")
             listdir = api.file.listdir(g.TEAM_ID, parent_dir)
-            file_names = [os.path.basename(file) for file in listdir]
-            if "meta.json" in file_names:
-                sly.logger.info("File mode is selected, but directory is uploaded.")
-                sly.logger.info("Switching to folder mode.")
-                g.INPUT_DIR, g.INPUT_FILE = parent_dir, None
-            else:
-                raise Exception("File mode is selected, but uploaded file is not an archive.")
+            if len(listdir) > 1:
+                curr_path = parent_dir
+            if not curr_path.endswith("/"):
+                curr_path += "/"
+            sly.logger.info(f"project_dir: {curr_path}")
+            sly.logger.info("File mode is selected, but directory is uploaded.")
+            sly.logger.info("Switching to folder mode.")
+            g.INPUT_DIR, g.INPUT_FILE = curr_path, None
         
     if g.INPUT_DIR is not None:
         if g.IS_ON_AGENT:
