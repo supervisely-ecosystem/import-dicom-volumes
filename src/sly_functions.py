@@ -2,6 +2,8 @@ import functools
 import os
 import shutil
 from typing import Callable
+import tarfile
+import zipfile
 
 import supervisely as sly
 from supervisely.io.fs import (get_file_ext, get_file_name,
@@ -39,6 +41,35 @@ def get_progress_cb(
 def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) -> str:
     """Download data from remote directory in Team Files."""
     project_path = None
+    if g.INPUT_DIR:
+        listdir = api.file.listdir(g.TEAM_ID, g.INPUT_DIR)
+        if len(listdir) == 1 and sly.fs.get_file_ext(listdir[0]) in [".zip", ".tar"]:
+            sly.logger.info("Folder mode is selected, but archive file is uploaded.")
+            sly.logger.info("Switching to file mode.")
+            g.INPUT_DIR, g.INPUT_FILE = None, os.path.join(g.INPUT_DIR, listdir[0])
+    elif g.INPUT_FILE:
+        if sly.fs.get_file_ext(g.INPUT_FILE) not in [".zip", ".tar"]:
+            sly.logger.info("File mode is selected, but file is not .zip or .tar archive.")
+            curr_path = os.path.normpath(g.INPUT_FILE)
+            parent_dir = os.path.dirname(curr_path)
+            grandparent_dir = os.path.dirname(parent_dir)
+            while grandparent_dir != "/import/import-dicom-volumes":
+                curr_path = os.path.dirname(curr_path)
+                parent_dir = os.path.dirname(curr_path)
+                grandparent_dir = os.path.dirname(parent_dir)
+            if not parent_dir.endswith("/"):
+                parent_dir += "/"
+            listdir = api.file.listdir(g.TEAM_ID, parent_dir)
+            if len(listdir) > 1 or sly.fs.get_file_ext(curr_path) in [".dcm", ".nrrd"]:
+                curr_path = parent_dir
+            elif len(listdir) == 1 and api.file.exists(g.TEAM_ID, curr_path) and sly.fs.get_file_ext(curr_path) not in [".zip", ".tar"]:
+                raise Exception("File mode is selected, but file is not .tar or .zip archive.")
+            if not curr_path.endswith("/"):
+                curr_path += "/"
+            sly.logger.info(f"project_dir: {curr_path}")
+            sly.logger.info("Switching to folder mode.")
+            g.INPUT_DIR, g.INPUT_FILE = curr_path, None
+        
     if g.INPUT_DIR is not None:
         if g.IS_ON_AGENT:
             agent_id, cur_files_path = api.file.parse_agent_id_and_path(g.INPUT_DIR)
@@ -68,6 +99,7 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
             cur_files_path = g.INPUT_FILE
         remote_path = g.INPUT_FILE
         save_archive_path = os.path.join(save_path, get_file_name_with_ext(cur_files_path))
+        extrack_dir = os.path.join(save_path, get_file_name(cur_files_path))
         sizeb = api.file.get_info_by_path(g.TEAM_ID, remote_path).sizeb
         progress_cb = get_progress_cb(
             api=api,
@@ -82,8 +114,12 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
             local_save_path=save_archive_path,
             progress_cb=progress_cb,
         )
-        shutil.unpack_archive(save_archive_path, save_path)
+        if not get_file_ext(save_archive_path) in [".zip", ".tar"]:
+            g.my_app.logger.error("Unsupported archive extension. Supported extensions: zip, tar")  
+            raise Exception("Unsupported archive extension. Supported extensions: zip, tar")
+        shutil.unpack_archive(save_archive_path, extrack_dir)
         silent_remove(save_archive_path)
+        sly.fs.remove_junk_from_dir(save_path)
         dir_list = os.listdir(save_path)
         if len(dir_list) != 1:          
             g.my_app.logger.error("The archive should contain only 1 project directory at the root level")
