@@ -7,7 +7,7 @@
         "essentials"
     ],
     "description": "Import volumes in DICOM and NRRD formats without annotations",
-    "docker_image": "supervisely/import-export:6.72.95",
+    "docker_image": "supervisely/import-export:6.72.97",
     "main_script": "src/main.py",
     "modal_template": "src/modal.html",
     "modal_template_state": {
