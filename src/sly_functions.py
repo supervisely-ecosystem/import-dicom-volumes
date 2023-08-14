@@ -93,6 +93,7 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
             cur_files_path = g.INPUT_FILE
         remote_path = g.INPUT_FILE
         save_archive_path = os.path.join(save_path, get_file_name_with_ext(cur_files_path))
+        extrack_dir = os.path.join(save_path, get_file_name(cur_files_path))
         sizeb = api.file.get_info_by_path(g.TEAM_ID, remote_path).sizeb
         progress_cb = get_progress_cb(
             api=api,
@@ -110,7 +111,7 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
         if not get_file_ext(save_archive_path) in [".zip", ".tar"]:
             g.my_app.logger.error("Unsupported archive extension. Supported extensions: zip, tar")  
             raise Exception("Unsupported archive extension. Supported extensions: zip, tar")
-        shutil.unpack_archive(save_archive_path, save_path)
+        shutil.unpack_archive(save_archive_path, extrack_dir)
         silent_remove(save_archive_path)
         dir_list = os.listdir(save_path)
         if len(dir_list) != 1:          
