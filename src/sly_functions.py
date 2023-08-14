@@ -39,15 +39,15 @@ def get_progress_cb(
 def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) -> str:
     """Download data from remote directory in Team Files."""
     project_path = None
-    if INPUT_DIR:
-        listdir = api.file.listdir(g.TEAM_ID, INPUT_DIR)
+    if g.INPUT_DIR:
+        listdir = api.file.listdir(g.TEAM_ID, g.INPUT_DIR)
         if len(listdir) == 1 and sly.fs.get_file_ext(listdir[0]) in [".zip", ".tar"]:
             sly.logger.info("Folder mode is selected, but archive file is uploaded.")
             sly.logger.info("Switching to file mode.")
-            INPUT_DIR, INPUT_FILE = None, os.path.join(INPUT_DIR, listdir[0])
-    elif INPUT_FILE:
-        if sly.fs.get_file_ext(INPUT_FILE) not in [".zip", ".tar"]:
-            parent_dir, _ = os.path.split(INPUT_FILE)
+            g.INPUT_DIR, g.INPUT_FILE = None, os.path.join(g.INPUT_DIR, listdir[0])
+    elif g.INPUT_FILE:
+        if sly.fs.get_file_ext(g.INPUT_FILE) not in [".zip", ".tar"]:
+            parent_dir, _ = os.path.split(g.INPUT_FILE)
             if os.path.basename(parent_dir) in ["ann", "mask", "volume"]:
                 parent_dir = os.path.dirname(parent_dir)
             if not parent_dir.endswith("/"):
@@ -58,7 +58,7 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
             if "meta.json" in file_names:
                 sly.logger.info("File mode is selected, but directory is uploaded.")
                 sly.logger.info("Switching to folder mode.")
-                INPUT_DIR, INPUT_FILE = parent_dir, None
+                g.INPUT_DIR, g.INPUT_FILE = parent_dir, None
             else:
                 raise Exception("File mode is selected, but uploaded file is not an archive.")
         
