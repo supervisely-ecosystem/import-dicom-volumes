@@ -49,7 +49,8 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
             g.INPUT_DIR, g.INPUT_FILE = None, os.path.join(g.INPUT_DIR, listdir[0])
     elif g.INPUT_FILE:
         if sly.fs.get_file_ext(g.INPUT_FILE) not in [".zip", ".tar"]:
-            curr_path = g.INPUT_FILE
+            sly.logger.info("File mode is selected, but file is not .zip or .tar archive.")
+            curr_path = os.path.normpath(g.INPUT_FILE)
             parent_dir = os.path.dirname(curr_path)
             grandparent_dir = os.path.dirname(parent_dir)
             while grandparent_dir != "/import/import-dicom-volumes":
@@ -59,14 +60,13 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
             if not parent_dir.endswith("/"):
                 parent_dir += "/"
             listdir = api.file.listdir(g.TEAM_ID, parent_dir)
-            if len(listdir) > 1:
+            if len(listdir) > 1 or sly.fs.get_file_ext(curr_path) in [".dcm", ".nrrd"]:
                 curr_path = parent_dir
-            elif len(listdir) == 1 and api.file.exists(g.TEAM_ID, curr_path):
-                curr_path = parent_dir
+            elif len(listdir) == 1 and api.file.exists(g.TEAM_ID, curr_path) and sly.fs.get_file_ext(curr_path) not in [".zip", ".tar"]:
+                raise Exception("File mode is selected, but file is not .tar or .zip archive.")
             if not curr_path.endswith("/"):
                 curr_path += "/"
             sly.logger.info(f"project_dir: {curr_path}")
-            sly.logger.info("File mode is selected, but directory is uploaded.")
             sly.logger.info("Switching to folder mode.")
             g.INPUT_DIR, g.INPUT_FILE = curr_path, None
         
