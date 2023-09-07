@@ -36,7 +36,8 @@ App is compatible with `.DCM` and `.NRRD` formats, dicom files without `.dcm` ex
 You can upload a directory or an archive. If you are uploading an archive, it must contain a single top-level directory.
 Structure of the directory is not important - app will find all the series and process them.
 
-Directory name defines project name. All volumes in root directory will be moved to dataset with name: `ds0`. Volumes can be placed in any location inside root directory.
+Directory name defines project name. All volumes in root directory will be moved to dataset with name: `ds0`. Volumes can be placed in any location inside root directory.<br>
+ℹ️ You can download the archive with data example [here](https://github.com/supervisely-ecosystem/import-dicom-volumes/files/12547806/my_nrrd_project.zip).
 
 Project directory example:
 
