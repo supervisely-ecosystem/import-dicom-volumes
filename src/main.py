@@ -61,6 +61,8 @@ def import_dicom_volumes(
             dataset_id=dataset.id, name=name, path=nrrd_path, log_progress=True
         )
 
+    if len(series_infos) == 0 and len(nrrd_paths) == 0:
+        sly.logger.warn("No volumes were uploaded. Please check the input directory.")
     if g.REMOVE_SOURCE and not g.IS_ON_AGENT:
         if g.INPUT_DIR is not None:
             path_to_remove = g.INPUT_DIR
