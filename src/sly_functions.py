@@ -50,7 +50,7 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
     project_path = None
     if g.INPUT_DIR:
         listdir = api.file.listdir(g.TEAM_ID, g.INPUT_DIR)
-        if len(listdir) == 1 and is_archive(g.INPUT_DIR, local=False):
+        if len(listdir) == 1 and is_archive(listdir[0], local=False):
             sly.logger.info("Folder mode is selected, but archive file is uploaded.")
             sly.logger.info("Switching to file mode.")
             g.INPUT_DIR, g.INPUT_FILE = None, os.path.join(g.INPUT_DIR, listdir[0])
