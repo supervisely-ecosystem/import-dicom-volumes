@@ -9,7 +9,8 @@ import sly_globals as g
 def import_dicom_volumes(
     api: sly.Api, task_id: int, context: dict, state: dict, app_logger
 ) -> None:
-    project_dir = f.download_data_from_team_files(api=api, task_id=task_id, save_path=g.STORAGE_DIR)
+    save_path = f.download_data_from_team_files(api=api, task_id=task_id, save_path=g.STORAGE_DIR)
+    project_dir = f.get_project_dir(path=save_path)
     project_name = (
         f.get_project_name_from_input_path(project_dir)
         if len(g.OUTPUT_PROJECT_NAME) == 0
@@ -22,7 +23,7 @@ def import_dicom_volumes(
     nrrd_paths = sly.volume.inspect_nrrd_series(root_dir=project_dir)
 
     if len(series_infos) == 0 and len(nrrd_paths) == 0:
-        sly.logger.warn("No volumes were uploaded. Please check the input directory.")
+        sly.logger.warn("No volumes were found. Please, check your input directory.")
     else:
         project = g.api.project.create(
             workspace_id=g.WORKSPACE_ID,

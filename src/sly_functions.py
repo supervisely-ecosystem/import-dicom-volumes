@@ -6,8 +6,7 @@ import tarfile
 import zipfile
 
 import supervisely as sly
-from supervisely.io.fs import (get_file_ext, get_file_name,
-                               get_file_name_with_ext, silent_remove)
+from supervisely.io.fs import get_file_ext, get_file_name, get_file_name_with_ext, silent_remove
 
 import sly_globals as g
 
@@ -38,38 +37,35 @@ def get_progress_cb(
     return progress_cb
 
 
+def is_archive(path, local=True):
+    if local and tarfile.is_tarfile(path):
+        return True
+    elif local and zipfile.is_zipfile(path):
+        return True
+    return get_file_ext(path) in [".zip", ".tar"] or path.endswith(".tar.gz")
+
+
 def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) -> str:
     """Download data from remote directory in Team Files."""
     project_path = None
     if g.INPUT_DIR:
         listdir = api.file.listdir(g.TEAM_ID, g.INPUT_DIR)
-        if len(listdir) == 1 and sly.fs.get_file_ext(listdir[0]) in [".zip", ".tar"]:
+        if len(listdir) == 1 and is_archive(g.INPUT_DIR, local=False):
             sly.logger.info("Folder mode is selected, but archive file is uploaded.")
             sly.logger.info("Switching to file mode.")
             g.INPUT_DIR, g.INPUT_FILE = None, os.path.join(g.INPUT_DIR, listdir[0])
     elif g.INPUT_FILE:
-        if sly.fs.get_file_ext(g.INPUT_FILE) not in [".zip", ".tar"]:
+        if not is_archive(g.INPUT_FILE, local=False):
             sly.logger.info("File mode is selected, but file is not .zip or .tar archive.")
             curr_path = os.path.normpath(g.INPUT_FILE)
             parent_dir = os.path.dirname(curr_path)
             grandparent_dir = os.path.dirname(parent_dir)
-            while grandparent_dir != "/import/import-dicom-volumes":
-                curr_path = os.path.dirname(curr_path)
-                parent_dir = os.path.dirname(curr_path)
-                grandparent_dir = os.path.dirname(parent_dir)
-            if not parent_dir.endswith("/"):
-                parent_dir += "/"
+            if grandparent_dir == "/import/import-dicom-volumes":
+                g.INPUT_DIR, g.INPUT_FILE = parent_dir, None
             listdir = api.file.listdir(g.TEAM_ID, parent_dir)
-            if len(listdir) > 1 or sly.fs.get_file_ext(curr_path) in [".dcm", ".nrrd"]:
-                curr_path = parent_dir
-            elif len(listdir) == 1 and api.file.exists(g.TEAM_ID, curr_path) and sly.fs.get_file_ext(curr_path) not in [".zip", ".tar"]:
-                raise Exception("File mode is selected, but file is not .tar or .zip archive.")
-            if not curr_path.endswith("/"):
-                curr_path += "/"
-            sly.logger.info(f"project_dir: {curr_path}")
-            sly.logger.info("Switching to folder mode.")
-            g.INPUT_DIR, g.INPUT_FILE = curr_path, None
-        
+            if all([sly.fs.get_file_ext(f) in [".dcm", ".nrrd", ".dicom"] for f in listdir]):
+                g.INPUT_DIR, g.INPUT_FILE = parent_dir, None
+
     if g.INPUT_DIR is not None:
         if g.IS_ON_AGENT:
             agent_id, cur_files_path = api.file.parse_agent_id_and_path(g.INPUT_DIR)
@@ -91,6 +87,7 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
             local_save_path=project_path,
             progress_cb=progress_cb,
         )
+        save_path = project_path
 
     elif g.INPUT_FILE is not None:
         if g.IS_ON_AGENT:
@@ -98,7 +95,8 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
         else:
             cur_files_path = g.INPUT_FILE
         remote_path = g.INPUT_FILE
-        save_archive_path = os.path.join(save_path, get_file_name_with_ext(cur_files_path))
+        local_save_path = os.path.join(save_path, get_file_name_with_ext(cur_files_path))
+
         extrack_dir = os.path.join(save_path, get_file_name(cur_files_path))
         sizeb = api.file.get_info_by_path(g.TEAM_ID, remote_path).sizeb
         progress_cb = get_progress_cb(
@@ -111,26 +109,15 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
         api.file.download(
             team_id=g.TEAM_ID,
             remote_path=remote_path,
-            local_save_path=save_archive_path,
+            local_save_path=local_save_path,
             progress_cb=progress_cb,
         )
-        if not get_file_ext(save_archive_path) in [".zip", ".tar"]:
-            g.my_app.logger.error("Unsupported archive extension. Supported extensions: zip, tar")  
-            raise Exception("Unsupported archive extension. Supported extensions: zip, tar")
-        shutil.unpack_archive(save_archive_path, extrack_dir)
-        silent_remove(save_archive_path)
-        sly.fs.remove_junk_from_dir(save_path)
-        dir_list = os.listdir(save_path)
-        if len(dir_list) != 1:          
-            g.my_app.logger.error("The archive should contain only 1 project directory at the root level")
-            raise Exception("The archive should contain only 1 project directory at the root level")
-        if not os.path.isdir(os.path.join(save_path, dir_list[0])):
-            g.my_app.logger.error("The archive should contain only the project directory at the root level")
-            raise Exception("The archive should contain only the project directory at the root level")
+        if is_archive(local_save_path):
+            save_archive_path = local_save_path
+            sly.fs.unpack_archive(save_archive_path, extrack_dir)
+            silent_remove(save_archive_path)
 
-        project_name = dir_list[0]
-        project_path = os.path.join(save_path, project_name)
-    return project_path
+    return save_path
 
 
 def generate_free_name(used_names, possible_name, with_ext=False, extend_used_names=False):
@@ -149,3 +136,15 @@ def generate_free_name(used_names, possible_name, with_ext=False, extend_used_na
     if extend_used_names:
         used_names.add(res_name)
     return res_name
+
+def get_project_dir(path: str) -> str:
+    """Returns project directory."""
+    def _volumes_exists(path: str) -> bool:
+        """Returns True if path contains volumes."""
+        listdir = sly.fs.list_files(path)
+        if len([f for f in listdir if sly.volume.get_extension(path=f) is not None]) > 0:
+            return True
+        return False
+    all_volume_dirs = [d for d in sly.fs.dirs_filter(path, _volumes_exists)]
+    common_prefix = os.path.commonprefix(all_volume_dirs)
+    return common_prefix
