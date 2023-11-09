@@ -5,11 +5,9 @@
                                  @files-uploaded="state.files = '/import/import-dicom-volumes/' + context.formId + '/'">
         </sly-file-storage-upload>
     </div>
-    <div class="mt15">
-        <el-checkbox v-model="state.anonymizeVolumes">Anonymize patient name and ID</el-checkbox>
-    </div>
     
-     <div class="fflex align-start" style="flex-direction: column; margin: 20px 0">
+    
+     <div v-if="!context.slyProjectId" class="fflex align-start" style="flex-direction: column; margin: 20px 0">
       <sly-field 
                    title="Result Project Name"
                    description="Enter project name manually (optional) or keep empty to generate it automatically">
@@ -17,8 +15,11 @@
       <el-input placeholder="Enter Project Name" v-model="state.project_name"></el-input>
         
     </div>
+    <div class="mt15">
+        <el-checkbox v-model="state.anonymizeVolumes">Anonymize patient name and ID</el-checkbox>
+    </div>
     <div class="fflex align-start" v-if="!state.prefNodeId">
-        <el-checkbox v-model="state.remove_source" class="mt10 mr10"></el-checkbox>
+        <el-checkbox v-model="state.remove_source" class="mt10 mr5"></el-checkbox>
         <sly-field class="mt20"
                    title="Remove temporary files after successful import"
                    description="Removes source directory from Team Files after successful import">

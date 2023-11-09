@@ -30,11 +30,19 @@ if DATASET_ID is not None:
 
 INPUT_DIR: str = os.environ.get("modal.state.slyFolder", None)
 INPUT_FILE: str = os.environ.get("modal.state.slyFile", None)
+INPUT_FILES: str = os.environ.get("modal.state.files", None)
+
+sly.logger.info(
+    f"INPUT_FILES: {INPUT_FILES}, INPUT_DIR: {INPUT_DIR}, INPUT_FILE: {INPUT_FILE}"
+)
 
 if INPUT_DIR:
     IS_ON_AGENT = api.file.is_on_agent(INPUT_DIR)
-else:
+elif INPUT_FILE:
     IS_ON_AGENT = api.file.is_on_agent(INPUT_FILE)
+else:
+    IS_ON_AGENT = api.file.is_on_agent(INPUT_FILES)
+
 
 OUTPUT_PROJECT_NAME = os.environ.get("modal.state.project_name", "")
 REMOVE_SOURCE = bool(strtobool(os.getenv("modal.state.remove_source")))
