@@ -1,9 +1,9 @@
 <div>
   <div>
     <sly-file-storage-upload
-      v-if="modal.state.slyProjectId && !(context.slySelectedContext == 'agent_folder' || context.slySelectedContext == 'agent_file')"
+      v-if="state.slyProjectId && !(context.slySelectedContext == 'agent_folder' || context.slySelectedContext == 'agent_file')"
       :options="{ folder: '/import/import-dicom-volumes/' + context.formId + '/' }"
-      @files-uploaded="modal.state.files = '/import/import-dicom-volumes/' + context.formId + '/'"
+      @files-uploaded="state.files = '/import/import-dicom-volumes/' + context.formId + '/'"
     >
     </sly-file-storage-upload>
   </div>
@@ -17,12 +17,12 @@
       <div class="fflex">
         <el-radio
           class="radio"
-          v-model="modal.state.dstProjectMode"
+          v-model="state.dstProjectMode"
           label="newProject"
           @input="(val) => {
                               if (val === 'newProject') {
-                                  modal.state.dstDatasetMode = 'newDataset';
-                                  modal.state.slyProjectId = ''
+                                  state.dstDatasetMode = 'newDataset';
+                                  state.slyProjectId = ''
                               }
                             }"
         >
@@ -30,38 +30,38 @@
         </el-radio>
         <el-radio
           class="radio"
-          v-model="modal.state.dstProjectMode"
+          v-model="state.dstProjectMode"
           label="existingProject"
           @input="(val) => {
                               if (val === 'existingProject') {
-                                  modal.state.dstDatasetMode = 'newDataset';
-                                  modal.state.slyDatasetId = ''
+                                  state.dstDatasetMode = 'newDataset';
+                                  state.slyDatasetId = ''
                               }
                             }"
           >Add to existing project
         </el-radio>
         <el-radio
           class="radio"
-          v-model="modal.state.dstProjectMode"
+          v-model="state.dstProjectMode"
           label="existingDataset"
           >Add to existing dataset
         </el-radio>
       </div>
       <div class="mt5">
         <div
-          v-if="modal.state.dstProjectMode === 'existingProject' || modal.state.dstProjectMode === 'existingDataset'"
+          v-if="state.dstProjectMode === 'existingProject' || state.dstProjectMode === 'existingDataset'"
         >
           <sly-select-project
             :workspace-id="context.workspaceId"
-            :project-id.sync="modal.state.slyProjectId"
+            :project-id.sync="state.slyProjectId"
             :options="{availableTypes: ['volumes']}"
           >
           </sly-select-project>
         </div>
-        <div v-if="modal.state.dstProjectMode === 'existingDataset'">
+        <div v-if="state.dstProjectMode === 'existingDataset'">
           <sly-select-dataset
-            :project-id="modal.state.slyProjectId"
-            :datasets.sync="modal.state.slyDatasetId"
+            :project-id="state.slyProjectId"
+            :datasets.sync="state.slyDatasetId"
             :options="{multiple: false, valueProperty: 'id'}"
           ></sly-select-dataset>
         </div>
@@ -69,7 +69,7 @@
     </sly-field>
   </div>
   <div
-    v-if="!modal.state.slyProjectId"
+    v-if="!state.slyProjectId"
     class="fflex align-start"
     style="flex-direction: column; margin: 20px 0"
   >
@@ -80,16 +80,16 @@
     </sly-field>
     <el-input
       placeholder="Enter Project Name"
-      v-model="modal.state.dstProjectName"
+      v-model="state.dstProjectName"
     ></el-input>
   </div>
   <div class="mt10">
-    <el-checkbox v-model="modal.state.anonymizeVolumes"
+    <el-checkbox v-model="state.anonymizeVolumes"
       >Anonymize patient name and ID</el-checkbox
     >
   </div>
-  <div class="mt10 mb10" v-if="!modal.state.prefNodeId">
-    <el-checkbox v-model="modal.state.removeSource"
+  <div class="mt10 mb10" v-if="!state.prefNodeId">
+    <el-checkbox v-model="state.removeSource"
       >Remove source files from Team Files after successful import</el-checkbox
     >
   </div>
