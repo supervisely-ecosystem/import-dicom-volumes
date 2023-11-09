@@ -1,14 +1,14 @@
 <div>
   <div>
     <sly-file-storage-upload
-      v-if="state.slyProjectId && !(context.slySelectedContext == 'agent_folder' || context.slySelectedContext == 'agent_file')"
+      v-if="state.slyProjectId && !state.prefNodeId"
       :options="{ folder: '/import/import-dicom-volumes/' + context.formId + '/' }"
       @files-uploaded="state.files = '/import/import-dicom-volumes/' + context.formId + '/'"
     >
     </sly-file-storage-upload>
   </div>
   <div
-    v-if="context.slySelectedContext === 'agent_folder' || context.slySelectedContext === 'agent_file'"
+    v-if="state.prefNodeId'"
   >
     <sly-field
       title="Result project"
