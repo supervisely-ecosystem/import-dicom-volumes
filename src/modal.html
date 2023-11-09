@@ -1,5 +1,11 @@
 <div>
-    <div class="mt10">
+    <div>
+        <sly-file-storage-upload v-if="context.slyProjectId"
+                                 :options="{ folder: '/import/import-dicom-volumes/' + context.formId + '/' }"
+                                 @files-uploaded="state.files = '/import/import-dicom-volumes/' + context.formId + '/'">
+        </sly-file-storage-upload>
+    </div>
+    <div class="mt15">
         <el-checkbox v-model="state.anonymizeVolumes">Anonymize patient name and ID</el-checkbox>
     </div>
     
