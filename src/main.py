@@ -11,11 +11,33 @@ def import_dicom_volumes(
 ) -> None:
     save_path = f.download_data_from_team_files(api=api, task_id=task_id, save_path=g.STORAGE_DIR)
     project_dir = f.get_project_dir(path=save_path)
-    project_name = (
-        f.get_project_name_from_input_path(project_dir)
-        if len(g.OUTPUT_PROJECT_NAME) == 0
-        else g.OUTPUT_PROJECT_NAME
-    )
+
+    if g.PROJECT_ID is None:
+        project_name = (
+            f.get_project_name_from_input_path(project_dir)
+            if len(g.OUTPUT_PROJECT_NAME) == 0
+            else g.OUTPUT_PROJECT_NAME
+        )
+
+        sly.logger.debug(f"Project name: {project_name}")
+
+        project = g.api.project.create(
+            workspace_id=g.WORKSPACE_ID,
+            name=project_name,
+            type=sly.ProjectType.VOLUMES,
+            change_name_if_conflict=True,
+        )
+    else:
+        project = api.project.get_info_by_id(g.PROJECT_ID)
+
+    if g.DATASET_ID is None:
+        dataset = g.api.dataset.create(
+            project_id=project.id, name=g.DEFAULT_DATASET_NAME, change_name_if_conflict=True
+        )
+        used_volumes_names = []
+    else:
+        dataset = api.dataset.get_info_by_id(g.DATASET_ID)
+        used_volumes_names = [volume.name for volume in api.volume.get_list(dataset.id)]
 
     # DICOM
     series_infos = sly.volume.inspect_dicom_series(root_dir=project_dir)
@@ -25,17 +47,6 @@ def import_dicom_volumes(
     if len(series_infos) == 0 and len(nrrd_paths) == 0:
         sly.logger.warn("No volumes were found. Please, check your input directory.")
     else:
-        project = g.api.project.create(
-            workspace_id=g.WORKSPACE_ID,
-            name=project_name,
-            type=sly.ProjectType.VOLUMES,
-            change_name_if_conflict=True,
-        )
-        dataset = g.api.dataset.create(
-            project_id=project.id, name=g.DEFAULT_DATASET_NAME, change_name_if_conflict=True
-        )
-
-        used_volumes_names = []
 
         # DICOM
         for serie_id, files in series_infos.items():

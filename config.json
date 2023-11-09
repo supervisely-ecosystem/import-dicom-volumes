@@ -28,7 +28,9 @@
             "files_folder",
             "files_file",
             "agent_folder",
-            "agent_file"
+            "agent_file",
+            "volumes_project",
+            "volumes_dataset"
         ]
     }
 }

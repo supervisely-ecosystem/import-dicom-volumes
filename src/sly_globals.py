@@ -19,6 +19,15 @@ TEAM_ID = int(os.environ["context.teamId"])
 WORKSPACE_ID = int(os.environ["context.workspaceId"])
 TASK_ID = int(os.environ["TASK_ID"])
 
+# if existing project (or dataset) is selected
+PROJECT_ID = os.environ.get("modal.state.slyProjectId", None)
+DATASET_ID = os.environ.get("modal.state.slyDatasetId", None)
+
+if PROJECT_ID is not None:
+    PROJECT_ID = int(PROJECT_ID)
+if DATASET_ID is not None:
+    DATASET_ID = int(DATASET_ID)
+
 INPUT_DIR: str = os.environ.get("modal.state.slyFolder", None)
 INPUT_FILE: str = os.environ.get("modal.state.slyFile", None)
 
