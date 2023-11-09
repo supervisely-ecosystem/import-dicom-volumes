@@ -48,23 +48,24 @@ def is_archive(path, local=True):
 def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) -> str:
     """Download data from remote directory in Team Files."""
     project_path = None
-    if g.INPUT_DIR:
-        listdir = api.file.listdir(g.TEAM_ID, g.INPUT_DIR)
-        if len(listdir) == 1 and is_archive(listdir[0], local=False):
-            sly.logger.info("Folder mode is selected, but archive file is uploaded.")
-            sly.logger.info("Switching to file mode.")
-            g.INPUT_DIR, g.INPUT_FILE = None, os.path.join(g.INPUT_DIR, listdir[0])
-    elif g.INPUT_FILE:
-        if not is_archive(g.INPUT_FILE, local=False):
-            sly.logger.info("File mode is selected, but file is not .zip or .tar archive.")
-            curr_path = os.path.normpath(g.INPUT_FILE)
-            parent_dir = os.path.dirname(curr_path)
-            grandparent_dir = os.path.dirname(parent_dir)
-            if grandparent_dir == "/import/import-dicom-volumes":
-                g.INPUT_DIR, g.INPUT_FILE = parent_dir, None
-            listdir = api.file.listdir(g.TEAM_ID, parent_dir)
-            if all([sly.fs.get_file_ext(f) in [".dcm", ".nrrd", ".dicom"] for f in listdir]):
-                g.INPUT_DIR, g.INPUT_FILE = parent_dir, None
+    if not g.IS_ON_AGENT:
+        if g.INPUT_DIR:
+            listdir = api.file.listdir(g.TEAM_ID, g.INPUT_DIR)
+            if len(listdir) == 1 and is_archive(listdir[0], local=False):
+                sly.logger.info("Folder mode is selected, but archive file is uploaded.")
+                sly.logger.info("Switching to file mode.")
+                g.INPUT_DIR, g.INPUT_FILE = None, os.path.join(g.INPUT_DIR, listdir[0])
+        elif g.INPUT_FILE:
+            if not is_archive(g.INPUT_FILE, local=False):
+                sly.logger.info("File mode is selected, but file is not .zip or .tar archive.")
+                curr_path = os.path.normpath(g.INPUT_FILE)
+                parent_dir = os.path.dirname(curr_path)
+                grandparent_dir = os.path.dirname(parent_dir)
+                if grandparent_dir == "/import/import-dicom-volumes":
+                    g.INPUT_DIR, g.INPUT_FILE = parent_dir, None
+                listdir = api.file.listdir(g.TEAM_ID, parent_dir)
+                if all([sly.fs.get_file_ext(f) in [".dcm", ".nrrd", ".dicom"] for f in listdir]):
+                    g.INPUT_DIR, g.INPUT_FILE = parent_dir, None
 
     if g.INPUT_DIR is not None:
         if g.IS_ON_AGENT:
