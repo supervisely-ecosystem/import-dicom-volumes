@@ -89,6 +89,7 @@ def import_dicom_volumes(
         source_dir_name = path_to_remove.lstrip("/").rstrip("/")
         sly.logger.info(msg=f"Source directory: '{source_dir_name}' was successfully removed.")
 
+    api.task.set_output_project(task_id, project.id, project.name)
     g.my_app.stop()
 
 
