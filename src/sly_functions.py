@@ -49,13 +49,15 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
     """Download data from remote directory in Team Files."""
     project_path = None
     if not g.IS_ON_AGENT:
-        if g.INPUT_DIR:
+        if g.INPUT_DIR or g.INPUT_FILES:
+            g.INPUT_DIR = g.INPUT_DIR or g.INPUT_FILES
             listdir = api.file.listdir(g.TEAM_ID, g.INPUT_DIR)
             if len(listdir) == 1 and is_archive(listdir[0], local=False):
                 sly.logger.info("Folder mode is selected, but archive file is uploaded.")
                 sly.logger.info("Switching to file mode.")
                 g.INPUT_DIR, g.INPUT_FILE = None, os.path.join(g.INPUT_DIR, listdir[0])
-        elif g.INPUT_FILE:
+        elif g.INPUT_FILE or g.INPUT_FILES:
+            g.INPUT_FILE = g.INPUT_FILE or g.INPUT_FILES
             if not is_archive(g.INPUT_FILE, local=False):
                 sly.logger.info("File mode is selected, but file is not .zip or .tar archive.")
                 curr_path = os.path.normpath(g.INPUT_FILE)
