@@ -8,7 +8,7 @@
     </sly-file-storage-upload>
   </div>
   <div
-    v-if="context.slySelectedContext == 'agent_folder' || context.slySelectedContext == 'agent_file'"
+    v-if="context.slySelectedContext === 'agent_folder' || context.slySelectedContext === 'agent_file'"
   >
     <sly-field
       title="Result project"
