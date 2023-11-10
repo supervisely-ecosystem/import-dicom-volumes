@@ -10,7 +10,7 @@ if sly.is_development():
     load_dotenv("local.env")
     load_dotenv(os.path.expanduser("~/supervisely.env"))
 
-api: sly.Api = sly.Api.from_env()
+api = sly.Api.from_env()
 my_app: AppService = AppService()
 
 TEAM_ID = int(os.environ["context.teamId"])
@@ -25,8 +25,10 @@ else:
     IS_ON_AGENT = False
 
 # if existing project (or dataset) is selected
-PROJECT_ID = os.environ.get("modal.state.slyProjectId") or None
-DATASET_ID = os.environ.get("modal.state.slyDatasetId") or None
+SLY_PROJECT_ID = os.environ.get("modal.state.slyProjectId") or None
+SLY_DATASET_ID = os.environ.get("modal.state.slyDatasetId") or None
+PROJECT_ID = os.environ.get("modal.state.projectId") or SLY_PROJECT_ID
+DATASET_ID = os.environ.get("modal.state.datasetId") or SLY_DATASET_ID
 
 if PROJECT_ID is not None:
     PROJECT_ID = int(PROJECT_ID)

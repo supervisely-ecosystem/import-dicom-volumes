@@ -7,13 +7,13 @@
         "essentials"
     ],
     "description": "Import volumes in DICOM and NRRD formats without annotations",
-    "docker_image": "supervisely/import-export:6.72.132",
+    "docker_image": "supervisely/import-export:6.72.180",
     "main_script": "src/main.py",
     "modal_template": "src/modal.html",
     "modal_template_state": {
         "dstProjectName": "",
-        "dstProjectMode": "newProject",
-        "dstDatasetMode": "newDataset",
+        "dstProjectMode": "new project",
+        "dstDatasetMode": "new dataset",
         "files": "",
         "anonymizeVolumes": true,
         "removeSource": true

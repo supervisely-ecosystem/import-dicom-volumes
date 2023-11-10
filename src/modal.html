@@ -1,67 +1,45 @@
 <div>
   <div>
     <sly-file-storage-upload
-      v-if="state.slyProjectId && !state.prefNodeId"
+      v-if="context.slySelectedContext !== 'files_folder' && !state.prefNodeId  && !state.slyFolder && !state.slyFile && context.slySelectedContext !== 'files_file'"
       :options="{ folder: '/import/import-dicom-volumes/' + context.formId + '/' }"
       @files-uploaded="state.files = '/import/import-dicom-volumes/' + context.formId + '/'"
     >
     </sly-file-storage-upload>
   </div>
-  <div
-    v-if="state.prefNodeId"
-  >
-    <sly-field
-      title="Result project"
-      description="Define destination project and/or dataset"
-    >
-      <div class="fflex">
-        <el-radio
-          class="radio"
-          v-model="state.dstProjectMode"
-          label="newProject"
-          @input="(val) => {
-                              if (val === 'newProject') {
-                                  state.dstDatasetMode = 'newDataset';
-                                  state.slyProjectId = ''
-                              }
-                            }"
-        >
-          Create new project
-        </el-radio>
-        <el-radio
-          class="radio"
-          v-model="state.dstProjectMode"
-          label="existingProject"
-          @input="(val) => {
-                              if (val === 'existingProject') {
-                                  state.dstDatasetMode = 'newDataset';
-                                  state.slyDatasetId = ''
-                              }
-                            }"
-          >Add to existing project
-        </el-radio>
-        <el-radio
-          class="radio"
-          v-model="state.dstProjectMode"
-          label="existingDataset"
-          >Add to existing dataset
-        </el-radio>
-      </div>
+  <div v-if="state.prefNodeId || (!!state.slyFolder && context.slySelectedContext !== 'files_folder') || (!!state.slyFile && context.slySelectedContext !== 'files_file') || context.slySelectedContext === 'files_folder' || context.slySelectedContext === 'files_file'">
+    <sly-field title="Result project" description="Define destination project">
+      <el-select
+        v-model="state.dstProjectMode"
+        @change="(val) => {
+                                if (val === 'new project') {
+                                    state.projectId = null;
+                                    state.datasetId = null
+                                };
+                                if (val === 'existing project') {
+                                    state.datasetId = null
+                                }
+                              }"
+      >
+        <el-option key="new project" value="new project"> </el-option>
+        <el-option key="existing project" value="existing project"> </el-option>
+        <el-option key="existing dataset" value="existing dataset"> </el-option>
+      </el-select>
       <div class="mt5">
         <div
-          v-if="state.dstProjectMode === 'existingProject' || state.dstProjectMode === 'existingDataset'"
+          v-if="state.dstProjectMode === 'existing dataset' || state.dstProjectMode === 'existing project'"
         >
           <sly-select-project
             :workspace-id="context.workspaceId"
-            :project-id.sync="state.slyProjectId"
+            :project-id.sync="state.projectId"
             :options="{availableTypes: ['volumes']}"
           >
           </sly-select-project>
         </div>
-        <div v-if="state.dstProjectMode === 'existingDataset'">
+        <div v-if="state.dstProjectMode === 'existing dataset'">
           <sly-select-dataset
-            :project-id="state.slyProjectId"
-            :datasets.sync="state.slyDatasetId"
+            :project-id="state.projectId"
+            :datasets.sync="state.datasetId"
             :options="{multiple: false, valueProperty: 'id'}"
           ></sly-select-dataset>
         </div>
@@ -69,9 +47,9 @@
     </sly-field>
   </div>
   <div
-    v-if="!state.slyProjectId"
+    v-if="state.dstProjectMode === 'new project' && (context.slySelectedContext === 'files_folder' || state.prefNodeId || context.slySelectedContext === 'files_file' || state.slyFolder || state.slyFile)"
     class="fflex align-start"
-    style="flex-direction: column; margin: 20px 0"
+    style="flex-direction: column; margin: 0 0 20px 0"
   >
     <sly-field
       title="Result Project Name"
@@ -80,7 +58,7 @@
     </sly-field>
     <el-input
       placeholder="Enter Project Name"
-      v-model="state.dstProjectName"
+      v-model="state.projectName"
     ></el-input>
   </div>
   <div class="mt10">
