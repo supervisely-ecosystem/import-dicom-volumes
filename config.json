@@ -12,8 +12,8 @@
     "modal_template": "src/modal.html",
     "modal_template_state": {
         "dstProjectName": "",
-        "dstProjectMode": "newProject",
-        "dstDatasetMode": "newDataset",
+        "dstProjectMode": "new project",
+        "dstDatasetMode": "new dataset",
         "files": "",
         "anonymizeVolumes": true,
         "removeSource": true

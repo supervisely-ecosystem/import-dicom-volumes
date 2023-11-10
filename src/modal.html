@@ -47,7 +47,7 @@
     </sly-field>
   </div>
   <div
-    v-if="state.dstProjectMode === 'new project' && (context.slySelectedContext === 'files_folder' || state.prefNodeId)"
+    v-if="state.dstProjectMode === 'new project' && (context.slySelectedContext === 'files_folder' || state.prefNodeId || context.slySelectedContext === 'files_file')"
     class="fflex align-start"
     style="flex-direction: column; margin: 0 0 20px 0"
   >
