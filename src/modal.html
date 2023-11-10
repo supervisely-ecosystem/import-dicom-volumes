@@ -7,7 +7,7 @@
     >
     </sly-file-storage-upload>
   </div>
-  <div v-if="state.prefNodeId || (!!state.slyFolder && context.slySelectedContext !== 'files_folder') || (!!state.slyFile && context.slySelectedContext !== 'files_file')">
+  <div v-if="state.prefNodeId || (!!state.slyFolder && context.slySelectedContext !== 'files_folder') || (!!state.slyFile && context.slySelectedContext !== 'files_file') || context.slySelectedContext === 'files_folder' || context.slySelectedContext === 'files_file'">
     <sly-field title="Result project" description="Define destination project">
       <el-select
         v-model="state.dstProjectMode"
