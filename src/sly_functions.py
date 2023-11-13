@@ -1,6 +1,5 @@
 import functools
 import os
-import shutil
 from typing import Callable
 import tarfile
 import zipfile
@@ -119,6 +118,17 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
             save_archive_path = local_save_path
             sly.fs.unpack_archive(save_archive_path, extrack_dir)
             silent_remove(save_archive_path)
+        elif local_save_path.endswith(".nii.gz") or local_save_path.endswith(".nii"):
+            file_name = get_file_name_with_ext(local_save_path)
+            msg = f"NIfTI files are not supported. Please upload an archive or directory containing .nrrd or .dcm files."
+            sly.logger.error(msg, exc_info=False)
+            api.task.set_output_error(task_id, msg, description=f"File: {file_name}")
+            return None
+        elif local_save_path.endswith(".gz") and not is_archive(local_save_path):
+            msg = "Unsupported archive format. Please, use .zip, .tar or .tar.gz files."
+            sly.logger.error(msg, exc_info=False)
+            api.task.set_output_error(task_id, msg, description=f"File: {local_save_path}")
+            return None
 
     return save_path
 
@@ -140,14 +150,19 @@ def generate_free_name(used_names, possible_name, with_ext=False, extend_used_na
         used_names.add(res_name)
     return res_name
 
+
 def get_project_dir(path: str) -> str:
     """Returns project directory."""
+
     def _volumes_exists(path: str) -> bool:
         """Returns True if path contains volumes."""
         listdir = sly.fs.list_files(path)
-        if len([f for f in listdir if sly.volume.get_extension(path=f) is not None]) > 0:
+        if len([f for f in listdir if sly.volume.get_extension(f) is not None]) > 0:
             return True
         return False
+
     all_volume_dirs = [d for d in sly.fs.dirs_filter(path, _volumes_exists)]
+    if len(all_volume_dirs) == 0:
+        return path
     common_prefix = os.path.commonprefix(all_volume_dirs)
     return common_prefix
