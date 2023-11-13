@@ -157,7 +157,7 @@ def get_project_dir(path: str) -> str:
     def _volumes_exists(path: str) -> bool:
         """Returns True if path contains volumes."""
         listdir = sly.fs.list_files(path)
-        if len([f for f in listdir if sly.volume.get_extension(path=f) is not None]) > 0:
+        if len([f for f in listdir if sly.volume.has_valid_ext(f)]) > 0:
             return True
         return False
 

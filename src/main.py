@@ -46,7 +46,10 @@ def import_dicom_volumes(
         nrrd_paths = sly.volume.inspect_nrrd_series(root_dir=project_dir)
 
         if len(series_infos) == 0 and len(nrrd_paths) == 0:
-            sly.logger.warn("No volumes were found. Please, check your input directory.")
+            msg = "No DICOM volumes were found. Please, check your input directory."
+            description = f"Supported formats: {g.ALLOWED_VOLUME_EXTENSIONS} (in archive or directory)."
+            sly.logger.warn(f"{msg} {description}")
+            api.task.set_output_error(task_id, msg, description)
         else:
             # DICOM
             for serie_id, files in series_infos.items():
@@ -79,6 +82,7 @@ def import_dicom_volumes(
                 g.api.volume.upload_nrrd_serie_path(
                     dataset_id=dataset.id, name=name, path=nrrd_path, log_progress=True
                 )
+            api.task.set_output_project(task_id, project.id, project.name)
 
         if g.REMOVE_SOURCE and not g.IS_ON_AGENT:
             if g.INPUT_DIR is not None:
@@ -89,7 +93,6 @@ def import_dicom_volumes(
             source_dir_name = path_to_remove.lstrip("/").rstrip("/")
             sly.logger.info(msg=f"Source directory: '{source_dir_name}' was successfully removed.")
 
-        api.task.set_output_project(task_id, project.id, project.name)
     g.my_app.stop()
 
 

@@ -5,6 +5,7 @@ import supervisely as sly
 from dotenv import load_dotenv
 from supervisely.app.v1.app_service import AppService
 from supervisely.io.fs import mkdir
+from supervisely.volume.volume import ALLOWED_VOLUME_EXTENSIONS
 
 if sly.is_development():
     load_dotenv("local.env")
