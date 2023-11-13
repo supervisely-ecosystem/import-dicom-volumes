@@ -46,6 +46,7 @@ def import_dicom_volumes(
         nrrd_paths = sly.volume.inspect_nrrd_series(root_dir=project_dir)
 
         if len(series_infos) == 0 and len(nrrd_paths) == 0:
+            api.project.remove(project.id)
             msg = "No DICOM volumes were found. Please, check your input directory."
             description = f"Supported formats: {g.ALLOWED_VOLUME_EXTENSIONS} (in archive or directory)."
             sly.logger.warn(f"{msg} {description}")
