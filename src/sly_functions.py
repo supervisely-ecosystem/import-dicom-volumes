@@ -120,7 +120,7 @@ def download_data_from_team_files(api: sly.Api, task_id: int, save_path: str) ->
             silent_remove(save_archive_path)
         elif local_save_path.endswith(".nii.gz") or local_save_path.endswith(".nii"):
             file_name = get_file_name_with_ext(local_save_path)
-            msg = f"Nifti files are not supported. Please, upload .nrrd or .dcm files archive or directory."
+            msg = f"NIfTI files are not supported. Please upload an archive or directory containing .nrrd or .dcm files."
             sly.logger.error(msg, exc_info=False)
             api.task.set_output_error(task_id, msg, description=f"File: {file_name}")
             return None
@@ -157,7 +157,7 @@ def get_project_dir(path: str) -> str:
     def _volumes_exists(path: str) -> bool:
         """Returns True if path contains volumes."""
         listdir = sly.fs.list_files(path)
-        if len([f for f in listdir if sly.volume.has_valid_ext(f)]) > 0:
+        if len([f for f in listdir if sly.volume.get_extension(f) is not None]) > 0:
             return True
         return False
 
