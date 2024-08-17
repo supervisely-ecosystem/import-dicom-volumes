@@ -2,7 +2,7 @@ import supervisely as sly
 
 import sly_functions as f
 import sly_globals as g
-
+import workflow as w
 
 @g.my_app.callback("import-dicom-volumes")
 @sly.timeit
@@ -86,6 +86,11 @@ def import_dicom_volumes(
                     dataset_id=dataset.id, name=name, path=nrrd_path, log_progress=True
                 )
             api.task.set_output_project(task_id, project.id, project.name)
+            if g.DATASET_ID:
+                w.workflow_output(api, g.DATASET_ID, "dataset")
+            else:
+                w.workflow_output(api, project.id, "project")
+
 
         if g.REMOVE_SOURCE and not g.IS_ON_AGENT:
             if g.INPUT_DIR is not None:
