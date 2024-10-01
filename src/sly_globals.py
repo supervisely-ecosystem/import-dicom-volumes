@@ -50,10 +50,7 @@ else:
     IS_ON_AGENT = api.file.is_on_agent(INPUT_FILES)
 
 
-OUTPUT_PROJECT_NAME = os.environ.get("modal.state.dstProjectName", "")
-if OUTPUT_PROJECT_NAME.strip() == "":
-    OUTPUT_PROJECT_NAME = "DICOM Volumes project"
-    
+OUTPUT_PROJECT_NAME = os.environ.get("modal.state.projectName", "")
 REMOVE_SOURCE = bool(strtobool(os.getenv("modal.state.removeSource")))
 
 DEFAULT_DATASET_NAME = "ds0"

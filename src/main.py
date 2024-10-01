@@ -4,6 +4,7 @@ import sly_functions as f
 import sly_globals as g
 import workflow as w
 
+
 @g.my_app.callback("import-dicom-volumes")
 @sly.timeit
 def import_dicom_volumes(
@@ -29,12 +30,14 @@ def import_dicom_volumes(
         else:
             if g.PROJECT_ID is None:
                 project_name = (
-                    f.get_project_name_from_input_path(project_dir)
-                    if len(g.OUTPUT_PROJECT_NAME) == 0
+                    f.get_project_name_from_input_path(project_dir) or "DICOM Volumes project"
+                    if len(g.OUTPUT_PROJECT_NAME.strip()) == 0
                     else g.OUTPUT_PROJECT_NAME
                 )
 
-                sly.logger.debug(f"Project name: {project_name}")
+                sly.logger.debug(
+                    f"Result project name: {project_name}, Input project name: {g.OUTPUT_PROJECT_NAME}"
+                )
 
                 project = g.api.project.create(
                     workspace_id=g.WORKSPACE_ID,
@@ -90,7 +93,6 @@ def import_dicom_volumes(
                 w.workflow_output(api, g.DATASET_ID, "dataset")
             else:
                 w.workflow_output(api, project.id, "project")
-
 
         if g.REMOVE_SOURCE and not g.IS_ON_AGENT:
             if g.INPUT_DIR is not None:
