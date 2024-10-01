@@ -30,7 +30,7 @@ def import_dicom_volumes(
         else:
             if g.PROJECT_ID is None:
                 project_name = (
-                    f.get_project_name_from_input_path(project_dir)
+                    f.get_project_name_from_input_path(project_dir) or "DICOM Volumes project"
                     if len(g.OUTPUT_PROJECT_NAME.strip()) == 0
                     else g.OUTPUT_PROJECT_NAME
                 )

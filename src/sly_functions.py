@@ -12,10 +12,11 @@ import sly_globals as g
 
 def get_project_name_from_input_path(input_path: str) -> str:
     """Returns project name from target sly folder name."""
+
     basename = os.path.basename(input_path)
     if basename == "":
-        basename = os.path.basename(os.path.dirname(input_path))
-    return basename or "DICOM Volumes project"
+        return None
+    return basename
 
 
 def update_progress(count, api: sly.Api, task_id: int, progress: sly.Progress) -> None:
