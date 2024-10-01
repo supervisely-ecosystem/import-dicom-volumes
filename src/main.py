@@ -29,6 +29,10 @@ def import_dicom_volumes(
 
         else:
             if g.PROJECT_ID is None:
+                sly.logger.debug(
+                    "Generating project name...",
+                    extra={"project_dir": project_dir, "save_path": save_path},
+                )
                 project_name = (
                     f.get_project_name_from_input_path(project_dir) or "DICOM Volumes project"
                     if len(g.OUTPUT_PROJECT_NAME.strip()) == 0
