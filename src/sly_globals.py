@@ -51,9 +51,6 @@ else:
 
 
 OUTPUT_PROJECT_NAME = os.environ.get("modal.state.dstProjectName", "")
-if OUTPUT_PROJECT_NAME.strip() == "":
-    OUTPUT_PROJECT_NAME = "DICOM Volumes project"
-    
 REMOVE_SOURCE = bool(strtobool(os.getenv("modal.state.removeSource")))
 
 DEFAULT_DATASET_NAME = "ds0"
