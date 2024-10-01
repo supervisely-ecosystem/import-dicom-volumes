@@ -10,6 +10,12 @@ from supervisely.io.fs import get_file_ext, get_file_name, get_file_name_with_ex
 import sly_globals as g
 
 
+def get_archive_name():
+    if g.INPUT_DIR:
+        return os.path.basename(g.INPUT_DIR)
+    return "DICOM Volumes project"
+
+
 def get_project_name_from_input_path(input_path: str) -> str:
     """Returns project name from target sly folder name."""
     basename = os.path.basename(input_path)
