@@ -11,11 +11,11 @@
 </p>
 
 
-[![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/import-dicom-volumes)
-[![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervise.ly/slack)
+[![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervisely.com/apps/supervisely-ecosystem/import-dicom-volumes)
+[![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervisely.com/slack)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/supervisely-ecosystem/import-dicom-volumes)
-[![views](https://app.supervise.ly/img/badges/views/supervisely-ecosystem/import-dicom-volumes.png)](https://supervise.ly)
-[![runs](https://app.supervise.ly/img/badges/runs/supervisely-ecosystem/import-dicom-volumes.png)](https://supervise.ly)
+[![views](https://app.supervisely.com/img/badges/views/supervisely-ecosystem/import-dicom-volumes.png)](https://supervisely.com)
+[![runs](https://app.supervisely.com/img/badges/runs/supervisely-ecosystem/import-dicom-volumes.png)](https://supervisely.com)
 
 </div>
 
@@ -27,7 +27,7 @@ App is compatible with `.DCM` and `.NRRD` formats, dicom files without `.dcm` ex
 🏋️ Starting from version `v1.2.0` application supports import from special directory on your local computer. It is made for Enterprise Edition customers who need to upload tens or even hundreds of gigabytes of data without using drag-ang-drop mechanism:
 
 1. Run agent on your computer where data is stored. Watch [how-to video](https://youtu.be/aO7Zc4kTrVg).
-2. Copy your data to special folder on your computer that was created by agent. Agent mounts this directory to your Supervisely instance and it becomes accessible in Team Files. Learn more [in documentation](https://docs.supervise.ly/customization/agents/agent-storage). Watch [how-to video](https://youtu.be/63Kc8Xq9H0U).
+2. Copy your data to special folder on your computer that was created by agent. Agent mounts this directory to your Supervisely instance and it becomes accessible in Team Files. Learn more [in documentation](https://docs.supervisely.com/customization/agents/agent-storage). Watch [how-to video](https://youtu.be/63Kc8Xq9H0U).
 3. Go to `Team Files` -> `Supervisely Agent` and find your folder there.
 4. Right click to open context menu and start app. Now app will upload data directly from your computer to the platform.
 
@@ -62,7 +62,7 @@ As a result we will get project `my_volumes_project` with 1 dataset named: `ds0`
 
 # How to Run
 
-**Step 1.** Add [Import DICOM Volumes](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/import-dicom-volumes) app to your team from Ecosystem
+**Step 1.** Add [Import DICOM Volumes](https://ecosystem.supervisely.com/apps/supervisely-ecosystem/import-dicom-volumes) app to your team from Ecosystem
 
 <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/import-dicom-volumes" src="https://i.imgur.com/zY6yG0N.png" width="350px" style='padding-bottom: 10px'/>
 
