@@ -70,13 +70,14 @@ def import_dicom_volumes(
                     used_names=used_volumes_names, possible_name=name, with_ext=True
                 )
                 used_volumes_names.append(name)
-                g.api.volume.upload_dicom_serie_paths(
-                    dataset_id=dataset.id,
-                    name=name,
-                    paths=files,
-                    log_progress=True,
-                    anonymize=g.ANONYMIZE_VOLUMES,
-                )
+                with f.LimitErrorHandler(api, task_id):
+                    g.api.volume.upload_dicom_serie_paths(
+                        dataset_id=dataset.id,
+                        name=name,
+                        paths=files,
+                        log_progress=True,
+                        anonymize=g.ANONYMIZE_VOLUMES,
+                    )
 
             # NRRD
             for nrrd_path in nrrd_paths:
@@ -85,9 +86,10 @@ def import_dicom_volumes(
                     used_names=used_volumes_names, possible_name=name, with_ext=True
                 )
                 used_volumes_names.append(name)
-                g.api.volume.upload_nrrd_serie_path(
-                    dataset_id=dataset.id, name=name, path=nrrd_path, log_progress=True
-                )
+                with f.LimitErrorHandler(api, task_id):
+                    g.api.volume.upload_nrrd_serie_path(
+                        dataset_id=dataset.id, name=name, path=nrrd_path, log_progress=True
+                    )
             api.task.set_output_project(task_id, project.id, project.name)
             if g.DATASET_ID:
                 w.workflow_output(api, g.DATASET_ID, "dataset")
