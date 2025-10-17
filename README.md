@@ -11,7 +11,7 @@
 </p>
 
 
-[![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](../../../../supervisely-ecosystem/import-dicom-volumes)
+[![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervisely.com/apps/supervisely-ecosystem/import-dicom-volumes)
 [![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervisely.com/slack)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/supervisely-ecosystem/import-dicom-volumes)
 [![views](https://app.supervisely.com/img/badges/views/supervisely-ecosystem/import-dicom-volumes.png)](https://supervisely.com)
@@ -62,7 +62,7 @@ As a result we will get project `my_volumes_project` with 1 dataset named: `ds0`
 
 # How to Run
 
-**Step 1.** Add [Import DICOM Volumes](../../../../supervisely-ecosystem/import-dicom-volumes) app to your team from Ecosystem
+**Step 1.** Add [Import DICOM Volumes](https://ecosystem.supervisely.com/apps/supervisely-ecosystem/import-dicom-volumes) app to your team from Ecosystem
 
 <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/import-dicom-volumes" src="https://i.imgur.com/zY6yG0N.png" width="350px" style='padding-bottom: 10px'/>
 
