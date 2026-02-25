@@ -98,8 +98,10 @@ def import_dicom_volumes(
             path_to_remove = g.INPUT_DIR or g.INPUT_FILE
             if path_to_remove:
                 api.file.remove(team_id=g.TEAM_ID, path=path_to_remove)
-            source_dir_name = path_to_remove.lstrip("/").rstrip("/")
-            sly.logger.info(msg=f"Source directory: '{source_dir_name}' was successfully removed.")
+                source_dir_name = path_to_remove.lstrip("/").rstrip("/")
+                sly.logger.info(msg=f"Source directory: '{source_dir_name}' was successfully removed.")
+            else:
+                sly.logger.info("Source removal is enabled, but no input file/folder path was provided.")
 
     g.my_app.stop()
 
