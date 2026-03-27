@@ -170,3 +170,34 @@ def get_project_dir(path: str) -> str:
         return path
     common_prefix = os.path.commonprefix(all_volume_dirs)
     return common_prefix
+
+class LimitErrorHandler:
+    def __init__(self, api: sly.Api, task_id: int):
+        self.api = api
+        self.task_id = task_id
+
+    def handle(self, msg: str, description: str = None):
+        sly.logger.error(msg, exc_info=False)
+        self.api.task.set_output_error(self.task_id, msg, description=description)
+        raise RuntimeError(msg)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        from requests.exceptions import HTTPError
+
+        if exc_type is None or exc_value is None:
+            return
+        elif not issubclass(exc_type, HTTPError):
+            raise exc_type(exc_value).with_traceback(traceback)
+        elif getattr(exc_value, "response") is None:
+            raise exc_type(exc_value).with_traceback(traceback)
+        # ({\"error\":\"FileSize\",\"details\":{\"sizeLimit\":\"25mb\",\"id\":null,\"errors\":[\"FileSize\"]}})"
+        
+        error_name = exc_value.response.json().get("error", "")
+        error_details = exc_value.response.json().get("details", {})
+        size_limit = error_details.get("sizeLimit", "unknown")
+        if exc_value.response.status_code == 400 and error_name == "FileSize":
+            msg = f"File size limit exceeded: {size_limit}. Please reduce the file size and try again."
+            self.handle(msg)
